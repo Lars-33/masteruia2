@@ -1,90 +1,27 @@
 \chapter{Introduction}
-This template is meant as an example
-of how a technical report can be
-structured. Discuss the table of content and the names of the chapters with the
-group members and supervisor to suit your specific report.\\
-
-\section{Some \LaTeX{} Examples}
-
-\subsection{Using the Bibliography}
-
-This is an example of how to use the bibliography and citations. Cite to Einstein \cite{einstein}, or something else \cite{dirac}.\\
 
 
-\subsection{Writing Mathematics}
+Autonomous navigation is one of the most important objectives in mobile robotics. 
 
-This is some examples of how to write math in \LaTeX.
+One of the common package for navigation in the ROS environment is the NAV 2. 
 
-\begin{equation}
-    y(x) = \frac{\sin x}{e^x}
-    \label{eq:label1}
-\end{equation}
-
-We can refer to the equation by using the label, like this: eq \ref{eq:label1}.\\
-
-We can choose whether to number the equation or not:
-\begin{equation*}
-    y(x) = \frac{\sin x}{e^x}
-\end{equation*}
-
-Lastly, we can write inline math: $y = a \cdot x + b$ 
-
-\subsection{Programming Code}
-
-Inline MATLAB code: \mcode{variabel = max(input)}\\
-
-MATLAB code in section:
-\begin{lstlisting}
-for i = 1 : 10
-% Skriv kode her
-end
-\end{lstlisting}
+The aim of this project is to create a autonomous platooning system with an Husky UGV and a TurtleBot3. 
 
 
-\newpage
 
-\subsection{Inserting Tables}
+The Husky is a ground vehicle from Clearpath. It has fire wheels, on each side the wheels are mechanically combined and is driven by one motor. Therefor the Huksy is an scid turning robot. The husky is a medium size robot with a footprint of 990mm x 670mm. 
 
-\begin{table}[h]
-    \centering
-    \begin{tabular}{c|c}
-        Variable    &   Value   \\
-        \hline
-         $\theta$   &   10      \\
-         $\omega$   &   40 
-    \end{tabular}
-    \caption{The table Caption}
-    \label{tab:label1}
-\end{table}
+The TurtleBot3 is a small differential wheeled robot with the footprint of 138mm x 178mm. 
 
-This table can be referred to by using the label, like this: table \ref{tab:label1}.
+A Nvidia Xavier AGX Developer Kit is the main computer for both. The software used to run autonomously is ROS2 Galactic with Nav2 running on Ubuntu 20.04.  
+The Nvidia Xavier AGX Developer Kit is an embedded computer choses for its efficient size and power consumption and its AI application. AI is not used in this project but can be relevant for future student continuing working with the Husky and the TurtleBot3. 
+Ubuntu is a OS based on the Linux kernal and one of the most popular Linux distributions. Its the preferred OS for ROS2 and therefor used here.
+ROS2 or Robot operating system is a large software platform for robotics. In this project ROS2 has provided comunication, hardware integration, visualization, navigation and more. 
+Nav2 is a powerful navigation system for robots that is built on top of ROS2. It includes a set of libraries and tools for performing various navigation tasks, such as localization, mapping, and path planning. When Nav2 i setup a robot can drive autonomous.
 
+The plan to achieve the goal of autonomous platooning is to setup the Husky and the TurtleBot3 with Nav2 independently. Create a custom Nav2 launch file so both can run Nav2 simultaneously on the same network. Then make a ROS2 node witch subscribe to the Husky position, use the Nav2 API to send a navigation goal to the TurtleBot3 behind the position of the Husky. It is import to mention this is not the only way to achieve autonomous platooning with these two robots, but its the plan for this project. 
 
-\subsection{Including figures}
+The Husky and the TurtleBot3 run with Nav2 independently, so the first subgoal was reached. The two other where not, but where look into. This is the result of learning while doing and its no secret that this project has some loos ends. 
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width = 0.7\textwidth]{Figures/Frontpage/forside_master_nor.pdf}
-    \caption{The figure Caption}
-    \label{fig:label1}
-\end{figure}
-
-This figure can be referred to by using the label, like this: figure \ref{fig:label1}.
-
-
-\subsection{Multicolumn}
-
-\begin{minipage}{0.45\textwidth}
-
-    \vspace{-4cm}
-    Text to describe for example a photo. Here we can write really long sentences just to prove the concept of the minipage, which is that the text will follow the width of the minipage that we have specified. In this case it was 45 \% of the total textwidth, with a small spacing in between, using the command "hspace". If we would like the text to start further up in the minipace, we can use the command "vspace" in front of the text, to shift it vertically.
-
-\end{minipage}
-\hspace{0.05\textwidth}
-\begin{minipage}{0.45\textwidth}
- 
-    \includegraphics[width = \textwidth]{Figures/Frontpage/forside_bachelor_nor.pdf}
-
-\end{minipage}
-
-
+Both the Husky and the TurtleBot3 
+should run autonomous on its own to be able to avoid obstacles. 

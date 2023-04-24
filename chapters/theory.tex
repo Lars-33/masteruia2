@@ -1,2 +1,176 @@
 \chapter{Theory on ...}
 
+\section{Robotics}
+ekf, odometry, 
+
+\section{Hardware}
+This could be a hardware list of 
+Here the hardware is shortly presented with details relevant for the project. 
+
+\subsection{Xavier}
+Xavier or NVIDIA Jetson AGX Xavier Developer Kit is an compact computer for AI applications. With the size 105mm x 105mm x 65mm and the power source being 9 - 20 volts its practical for mobile robots. 
+
+The Nividia computers come with their own Linux version called JetPack, based on Ubuntu. The JetPack system includes AI applications. JetPack and the GPU is the reason why the Xavier is suitable for AI applications. The CPU of the Xavier has an ARM architecture. A WiFi module can be attached and is in this project.
+
+\subsection{LiDAR}
+
+LiDAR(laser imaging, detection, and ranging) is a method of measuring distances with laser. The principle is sending a laser beam at a target, sensing the reflection and calculating the distance based on time between laser sent and received. 
+
+TurtleBot3 uses a LiDAR called LDS-01, the Husky uses Ouster OS-1-64. Here is a table with relevant data for the LiDAR's. 
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c|c|c}
+        Specifications          & TrutleBot3        & Husky             \\ 
+                                & LDS-01            & Ouster OS-1-64    \\ \hline
+        Range                   & 120 ~ 3,500mm     & 0.8m ~ 120m       \\ \hline
+        Vertical resolution     & 1 channel         & 64 channel        \\ \hline
+        Angular Range           & 360^\circ         & 360^\circ         \\ \hline  
+        Power source            & Micro USB         & Barrel jack       \\  
+                                & 5 volts           & 24 volts          \\ \hline
+        Data line               & Micro USB         & Ethernet          \\       
+    \end{tabular}
+    \caption{LiDAR data}
+    \label{tab:my_label}
+\end{table}
+
+site : 
+https://emanual.robotis.com/docs/en/platform/turtlebot3/appendix_lds_01/
+
+
+\subsection{IMU}
+Inertial measurement unit(IMU) is an electronic device that measures and reports a body's specific force, angular rate, and sometimes the orientation of the body, using a combination of accelerometers, gyroscopes, and sometimes magnetometers. 
+(stjelt fra wiki : https://en.wikipedia.org/wiki/Inertial_measurement_unit#cite_note-1 ) 
+
+The Husky uses a IMU called UM7 uses USB for data and power. 
+The IMU of the TurtleBot3 is part of the OpenCR1.0. 
+
+\subsection{Rotary encoder}
+Rotary encoders are electro-mechanical devices that convert the angular position or rotation of a shaft into an electrical signal. They are commonly used in robotics, automation, and other control systems to measure the position and speed of rotating objects, such as wheels, motors, and joints. Rotary encoders typically consist of a rotating disk or shaft with evenly spaced markers or slots, and a stationary sensor or detector that reads the changes in the markers or slots as the shaft rotates. There are two main types of rotary encoders: incremental and absolute. Incremental encoders provide relative position and speed information, while absolute encoders provide absolute position information. Rotary encoders can be connected to a microcontroller or other processing unit to read and interpret the electrical signal, and use it to control the movement and position of a robot or other device.
+
+\subsection{Husky}
+The Husky UGV is an medium sized UGV(unmanned ground veichle) from Clearpath. It have fire wheels and a footprint of 990mm x 670mm. It is powered by two 24volts battery's in series, total 48 volts. There is three power outputs for external components 5V, 12V and 24V fused at 5A each. A motor drive and wheel where included, the mini-ITX and IMU where not. 
+
+The front and back wheel of each side is mechanical connected, and power by one motor. Therefor in able to turn the Huksy will scid, this makes the turning and odometry prediction form the wheel encoders inaccurate. 
+(This makes the odometry more dependent on the IMU and should be in mind when tuning the ekf filter or similar data fusing methods.) 
+
+The size and sciding of the Huksy combined with the range of the LiDAR can be an issue when driving autonomous with Nav2 inside. It acts clumsy with the turning blind zone under 80cm. 
+
+\subsection{TurtleBot3}
+The TurtleBot3(Waffle Pi) is small robot provided by Open Robotics and ROBOTIS. The footprint of the robot is 138mm x 178mm, its driven by two front wheels and have two ball casters in the back. Therefor the TurtleBot3 has differential drive, witch is a precise way to turn(site). 
+
+The OpenCR1.0 is a multi purpose board on the TurtleBot3. This board connects the battery, and powers the Xavier and motors for the wheels. The control signal for the wheels comes from the Xavier through the OpenCR1.0 int the wheels. 
+A LiDAR is included as well as an IMU on OpenCR1.0 board.
+
+site : 
+https://emanual.robotis.com/docs/en/platform/turtlebot3/features/#specifications
+
+\subsection{}
+
+\section{Software}
+
+The software used in this project is explained here. 
+
+\subsection{Ubuntu}
+
+Ubuntu is an open source operating system(OS) based on Linux. It the most popular Linux distribution and the main OS for ROS2. ROS2 can be used on Windows and Mac as well but is sub optimal. Ubuntu have two main forms desktop and server. Desktop provides a graphical user interface(GUI). Ubuntu server dose not have a GUI, it is just a text-based user interfaces(TUI). The server is more demands less possessing power and storage. 
+
+https://ubuntu.com/about
+https://opensource.org/docs/osd 
+
+\subsection{SSH}
+
+SSH or Secure Shell is a network protocol for communication between two computers witch is encrypted. The two computers have to be on the same network. SSH is a terminal based program, therefor there is no GUI just a TUI. 
+
+In robotics SSH is commonly used. Often its not practical or possible to connect the robots computer to keyboard and a monitor. A lot of robots have computers running a TUI based OS, so a monitor wound not give more than SSH. 
+
+\subsection{ROS2}
+
+Robot operating system 2(ROS2) is a meta OS installed on top of an other OS. The OS most commonly used is Ubuntu. ROS2 can be described as a base for building robot applications with a set of software libraries and tools. ROS2 is open source and has a large community, this is essential. The large community means that a its a lot of help online. Open source makes is easier to make ROS2 software to different hardware. 
+
+\subsubsection{ROS2 theory}
+Camilla : 
+ROS2, or Robot Operating System 2, is a set of software libraries and tools for building robot applications. It is the next version of the original Robot Operating System (ROS) and was released in 2014 by the Open Robotics organization. (skriv om)
+
+ROS2 offers several improvements over ROS, including better real-time performance, enhanced security features, and support for a wider range of programming languages. It also provides more advanced features for distributed computing and communication between nodes, making it easier to build and maintain complex robot systems. (skriv om)
+
+ROS2 is designed to be flexible and scalable, allowing developers to choose the features and components they need for their specific application. It is open-source software, meaning that anyone can use, modify, and distribute it freely. (skriv om)
+Dette må tilredegjøres for i theory:
+
+basic concepts for representing the position and orientation of rigid bodies in 3D:
+
+Frames of reference 
+
+Representing positions
+Representing rotations
+Rotational transformations
+Composition of rotations
+Parameterization of rotations
+Homogeneous transformation matrices
+
+ kinematics of nonholonomic mobile robots:
+
+ The kinematic model of the Unicycle robot
+The kinematic model of the Differential Drive robot
+The kinematic model of the Car-Like robot
+Odometry
+
+ Kinematics of Holonomic Robots:
+
+ Kinematic model of a holonomic robot
+Motion with respect to the robot’s frame
+Motion with respect to the world’s frame
+
+kinematic control of mobile robots:
+
+Open Loop control
+Feedback Control
+
+Kanskje:
+
+Rigid Body Dynamics:
+
+Center of Mass
+Kinetic Energies
+Moments of Inertia
+Axis Theorems
+
+Dynamic Modeling:
+
+Introduction
+Lagrange Formulation
+Lagrange Equations
+Recursive Formulations
+
+Feedback Control:
+
+Setup
+Linearization
+Design of the Controller
+Numerical Integration of the Continuous System
+Simulation of the Robot-Controller System in Gazebo
+
+\subsubsection{ROS2 components} 
+
+As mention ROS2 has different libraries and tools, here the relevant ones them will be explained. 
+
+A large part of ROS2 is communication with the messages. Messages refers to data this can be single variables like "int", "float", "string" and so on. Bigger data types like "Twist.msg" and "Odometry.msg" is also messages, this often contain hierarchy of data. 
+
+\paragraph{Nodes}
+A node in ROS2 is a lightweight and modular process that performs a specific computation. Each node is identified by a unique name within the ROS2 system. Nodes communicate with each other by publishing messages to topics or subscribing to topics to receive messages. Nodes can also communicate with each other using services, which provide a request/response communication pattern. ROS2 nodes can also communicate with each other using actions, which provide a more complex form of request/response communication pattern that involves feedback and cancellation. 
+
+\paragraph{Launch files} is a file for 
+In bigger ROS2 project there is often a lot of different hardware that needs to be stated or launched to start a complete robot. Python launch files is a script for launching multiple nodes and send arguments into them. Launch files can also launch other launch files, convenient because this is often provided with complete robots. 
+
+\paragraph{rqt} is a visualisation tool for ROS2. It provides a map of nodes and topics on the local network. This is a great tool for debugging. 
+
+\paragraph{Gazebo} is a physics-based simulator for testing and developing robotics algorithms. It uses models to represent robots and objects in the simulated environment. Gazebo supports a plugin system for extending its functionality. It provides a GUI for visualizing and interacting with the simulation.  
+
+\paragraph{Rviz} is a 3D visualization tool for ROS that allows users to view and interact with robot data in real-time. It can display data such as point clouds, laser scans, and 3D models of robots and their environments. Rviz allows users to change the perspective of the visualization and interact with the data using mouse and keyboard commands. It can also be used to configure sensors and other components of a robot system by visualizing their data and properties. In summary, Rviz is a powerful 3D visualization tool for ROS that allows users to interact with robot data in real-time and visualize sensor data and properties.
+
+\paragraph{Nav2}
+Nav2 (Navigation Stack 2) is a high-level open-source software framework for autonomous robot navigation in ROS2. It provides a set of reusable and configurable software components for creating complex navigation behaviors for mobile robots, including path planning, localization, obstacle avoidance, and control. Nav2 is built on top of the ROS2 middleware and leverages other ROS2 packages for communication and hardware abstraction. It also provides interfaces for integrating with other navigation systems and tools, such as Gazebo and RViz. Nav2 is designed to be modular and extensible, allowing developers to customize and add new navigation behaviors to meet the specific requirements of their robots and environments.
+
+\section{Autonomous platooning}
+
+Autonomous platooning is a technique used in transportation, where a group of vehicles travel closely together in a formation, with one vehicle leading the group and the others following it. The leading vehicle is typically driven by a human driver or an autonomous system, and the following vehicles are autonomous and communicate with the leading vehicle to maintain the desired distance and speed. The purpose of autonomous platooning is to increase efficiency and safety on the roads. By traveling in a close formation, the vehicles can reduce their air resistance and save fuel. Additionally, the autonomous systems can react more quickly to changes in the road conditions, such as traffic congestion or accidents, reducing the risk of collisions and improving overall safety. Autonomous platooning is an active area of research, and several companies and research organizations are working on developing and testing platooning systems for a variety of vehicles, including trucks, buses, and passenger cars. 
