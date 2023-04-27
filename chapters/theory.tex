@@ -48,6 +48,9 @@ The IMU of the TurtleBot3 is part of the OpenCR1.0.
 \subsection{Rotary encoder}
 Rotary encoders are electro-mechanical devices that convert the angular position or rotation of a shaft into an electrical signal. They are commonly used in robotics, automation, and other control systems to measure the position and speed of rotating objects, such as wheels, motors, and joints. Rotary encoders typically consist of a rotating disk or shaft with evenly spaced markers or slots, and a stationary sensor or detector that reads the changes in the markers or slots as the shaft rotates. There are two main types of rotary encoders: incremental and absolute. Incremental encoders provide relative position and speed information, while absolute encoders provide absolute position information. Rotary encoders can be connected to a microcontroller or other processing unit to read and interpret the electrical signal, and use it to control the movement and position of a robot or other device.
 
+\subsection{EKF filter}
+The EKF (Extended Kalman Filter) is a type of recursive Bayesian filter commonly used in robotics and control systems for estimating the state of a system with noisy sensor measurements. The EKF is an extension of the Kalman Filter that is designed to handle nonlinear systems by using a linear approximation of the system's dynamics and measurement functions around the current state estimate. The EKF estimates the system state by recursively updating a predicted state estimate using a model of the system's dynamics and the measurements received from sensors. The EKF also estimates the uncertainty of the state estimate using a covariance matrix, which is updated at each time step based on the predicted and measured uncertainties. The EKF is widely used in robotics applications, such as localization and mapping, where it can estimate the position and orientation of a robot based on noisy sensor data, such as GPS, IMU, or visual odometry.
+
 \subsection{Husky}
 The Husky UGV is an medium sized UGV(unmanned ground veichle) from Clearpath. It have fire wheels and a footprint of 990mm x 670mm. It is powered by two 24volts battery's in series, total 48 volts. There is three power outputs for external components 5V, 12V and 24V fused at 5A each. A motor drive and wheel where included, the mini-ITX and IMU where not. 
 
@@ -88,73 +91,27 @@ In robotics SSH is commonly used. Often its not practical or possible to connect
 
 Robot operating system 2(ROS2) is a meta OS installed on top of an other OS. The OS most commonly used is Ubuntu. ROS2 can be described as a base for building robot applications with a set of software libraries and tools. ROS2 is open source and has a large community, this is essential. The large community means that a its a lot of help online. Open source makes is easier to make ROS2 software to different hardware. 
 
-\subsubsection{ROS2 theory}
-Camilla : 
-ROS2, or Robot Operating System 2, is a set of software libraries and tools for building robot applications. It is the next version of the original Robot Operating System (ROS) and was released in 2014 by the Open Robotics organization. (skriv om)
-
-ROS2 offers several improvements over ROS, including better real-time performance, enhanced security features, and support for a wider range of programming languages. It also provides more advanced features for distributed computing and communication between nodes, making it easier to build and maintain complex robot systems. (skriv om)
-
-ROS2 is designed to be flexible and scalable, allowing developers to choose the features and components they need for their specific application. It is open-source software, meaning that anyone can use, modify, and distribute it freely. (skriv om)
-Dette må tilredegjøres for i theory:
-
-basic concepts for representing the position and orientation of rigid bodies in 3D:
-
-Frames of reference 
-
-Representing positions
-Representing rotations
-Rotational transformations
-Composition of rotations
-Parameterization of rotations
-Homogeneous transformation matrices
-
- kinematics of nonholonomic mobile robots:
-
- The kinematic model of the Unicycle robot
-The kinematic model of the Differential Drive robot
-The kinematic model of the Car-Like robot
-Odometry
-
- Kinematics of Holonomic Robots:
-
- Kinematic model of a holonomic robot
-Motion with respect to the robot’s frame
-Motion with respect to the world’s frame
-
-kinematic control of mobile robots:
-
-Open Loop control
-Feedback Control
-
-Kanskje:
-
-Rigid Body Dynamics:
-
-Center of Mass
-Kinetic Energies
-Moments of Inertia
-Axis Theorems
-
-Dynamic Modeling:
-
-Introduction
-Lagrange Formulation
-Lagrange Equations
-Recursive Formulations
-
-Feedback Control:
-
-Setup
-Linearization
-Design of the Controller
-Numerical Integration of the Continuous System
-Simulation of the Robot-Controller System in Gazebo
-
 \subsubsection{ROS2 components} 
 
 As mention ROS2 has different libraries and tools, here the relevant ones them will be explained. 
 
 A large part of ROS2 is communication with the messages. Messages refers to data this can be single variables like "int", "float", "string" and so on. Bigger data types like "Twist.msg" and "Odometry.msg" is also messages, this often contain hierarchy of data. 
+Here is a list of common ROS/ROS2 topics 
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|c}
+       Topic name       &  Function         \\ \hline
+        /cmd\_vel       & Velocity command  \\
+        /odom           & Odometer          \\
+        /scan           & 2D laser scan     \\
+        /PointCloud2    & 3D laser scan     \\
+        /imu/data       & IMU data          \\
+    \end{tabular}
+    \caption{Caption}
+    \label{tab:my_label}
+\end{table}
+
+The standard topic names are convenient but can cause problems when there is multiple types of the same sensor. Namespace solves this problem by putting "/namespace" in front of "/generic\_topic\_name".  
 
 \paragraph{Nodes}
 A node in ROS2 is a lightweight and modular process that performs a specific computation. Each node is identified by a unique name within the ROS2 system. Nodes communicate with each other by publishing messages to topics or subscribing to topics to receive messages. Nodes can also communicate with each other using services, which provide a request/response communication pattern. ROS2 nodes can also communicate with each other using actions, which provide a more complex form of request/response communication pattern that involves feedback and cancellation. 
