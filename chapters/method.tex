@@ -21,15 +21,30 @@ This section will describe the setup of the Husky and its components. Some of th
 The IMU was glued to the center of the tray, connected with a USB to the Xavier. In the Husky there are two Xavier only one of them is used in this project. The other will be referred to as Xavier2. Both of the Xaviers where placed in the tray and secured with a 3D printed mount. The Xaviers where lacking USB ports so both of them got a USB hub. 
 The Ouster LiDAR has two components the laser scanner and the power/data brick. The scanner is mounted on top of a aluminum frame in the front for long distance scanning. The brick is blued to the front wall off the tray, connected to 24 volt barrel jack and Ethernet form the ruter. 
 The router is mounted in the front of the aluminum frame powered by 12 volt barrel jack. Xavier and Xavier2 is connected with Ethernet, Xavier also has a WiFi connection. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.5\textwidth]{Figures/drawio/Husky_HW.drawio.png}
+    \caption{Husky hardware map, this dose not include components on the Husky used in other projects}
+    \label{fig:Husky_HW}
+\end{figure}
 
 \subsection{Software}
-When setting up the ROS2 software Rviz and rqt was used to test.
-Clearpath provides binary packages for the Husky in ROS2 foxy, because of this the hole project was set up foxy. The Clearpath packages provides the essential software for making the husky move with ROS2. This will be referd to as "husky\_base". The "joy\_teleop", "/twist\_mux" and "/huksy\_velocity\_controller". 
-"joy\_teleop" converts a Logitech joystick controllers signal into "joy\_teleop/cmd\_vel" a standard velocity massage with namespace. "/twist\_mux" converts "/cmd\_vel" with and without namespaces to "/husky\_velocity\_controller/cmd\_vel\_unstamped" and sends it into "/huksy\_velocity\_controller". Every velocity comand for the Husky goes though the twist node, joystick, keyboard and Nav2. In addition to controlling the motors "/huksy\_velocity\_controller" also publishes "/odom" based on the wheel encounters on the Husky. The "husky\_base" also launches a node called "/ekf\_node" fusing odometry and IMU to localize the Husky. 
-An other project on the Husky was pick and place and used the ViperX 300 Robot Arm. This arm was better to set up with Galactic, so the project was converted to Galactic. Foxy and Galactic are similar and didn't cause any issues, except for with the "husky\_base". Clearpath did not provide binary packages for the Husky in Galactic just source. This source files did not initially work on the Husky. The student working on pick and place edited and made some changes to the source files, making them work. Still the source files on Galactic are more unstable then Foxy. "husky\_base" is launched in Foxy and the rest of the project in Galactic. 
-The UM7 ROS2 package where found on GitHub. This packages launches a node called "/um7\_dirver" publishing data from the IMU on topic "/imu/data", into "/ekf\_node".
-Ouster has a well documented GitHub with ROS2 drivers for there hardware, where the driver for the OS1 was acquired. The package starts up a node called "/ouster\_driver" witch publishes "PoistCloud2" and "/points". Since Nav2 uses "/scan" as perception topic, a packages called "pointcloud\_to\_laserscan" was installed to make the OS1 comunicate with Nav2. 
-This image represents software of the Husky in a rqt format where ovals are nodes and squares is topics. 
+When setting up the ROS2 software Rviz and rqt was used to test all components. 
+There where three porject on the Husky at the same time, so a common GitHub was made "uia\_husky\_0776".[] This includes packages for Husky, OS1, UM7 and "pointcloud\_to\_laserscan". A launch file was made to launch it all at once "husky.launch.py" in "uia\_husky\_0776/husky\_group/launch/"
+Clearpath provides binary packages for the Husky in ROS2 foxy, because of this the hole project was set up foxy. The Clearpath packages provides the essential software for making the husky move with ROS2. To start up the Husky "base\_launch.py" from "husky\_base/launch" was used in this project. "base\_launch.py" starts up the nodes "joy\_teleop", "/twist\_mux", "/huksy\_velocity\_controller" and "/ekf\_node". 
+"joy\_teleop" converts a Logitech joystick controllers signal into "joy\_teleop/cmd\_vel" a standard velocity massage with namespace. 
+"/twist\_mux" converts "/cmd\_vel" with and without namespaces to "/husky\_velocity\_controller/cmd\_vel\_unstamped" and sends it into "/huksy\_velocity\_controller". Every velocity command for the Husky goes though the twist node, joystick, keyboard and Nav2. In addition to controlling the motors "/huksy\_velocity\_controller" also publishes "/odom" based on the wheel encounters on the Husky. The "base\_launch.py" also launches a node called "/ekf\_node" fusing odometry(/odom) and IMU(/imu/data) to "/odometry/filtered" to localize the Husky with greater presition[]. 
+An other project on the Husky was pick and place and used the ViperX 300 Robot Arm. This arm was better to set up with Galactic, so the project was converted to Galactic. Foxy and Galactic are similar and didn't cause any issues, except for with the "base\_launch.py". Clearpath did not provide binary packages for the Husky in Galactic just source. This source files did not initially work on the Husky. The student working on pick and place made some changes to the source files, making them work. Still the source files on Galactic are more unstable then Foxy. Thefor "base\_launch.py" is launched in Foxy and the rest of the project in Galactic. 
+The UM7 ROS2 package where found on GitHub.[] This packages launches a node called "/um7\_dirver" publishing data from the IMU on topic "/imu/data", into "/ekf\_node".
+Ouster has a well documented GitHub with ROS2 drivers for there hardware, where the driver for the OS1 was acquired[]. The package starts up a node called "/ouster\_driver" witch publishes "/points". Since Nav2 uses "/scan" as perception topic, a packages called "pointcloud\_to\_laserscan" was installed to make the OS1 communicate with Nav2. 
+
+This image represents software of the Husky in a rqt format where ovals are nodes and squares is topics. This dose not include Nav2. 
+\begin{figure}[H]
+    \centering
+    \includesvg[width = 1\textwidth]{Figures/drawio/Husky_SW5.svg}
+    \caption{Husky software map}
+    \label{fig:HuskySW}
+\end{figure}
 
 
 \section{TurtleBot3}
@@ -45,4 +60,14 @@ The TurtleBot3 started with no battery and was driven by a Raspberry Pi. The Pi 
 \end{figure}
 
 \subsection{Software}
-The name of user on the TB3 Xavier is tb and will be the reference. tb is running Ubuntu 20.04 Desktop with ROS2 galactic Debian(binary), TB3 packages binary, Nav2 binary. The TB3 packages 
+The name of user on the TB3 Xavier is tb and will be the reference. tb is running Ubuntu 20.04 Desktop with ROS2 galactic Debian(binary), TB3 packages binary[], Nav2 binary. The "robot.launch.py" from the "turtlebot3\_bringup/launch" is the file used for starting up the TB3 in this project. "robot.launch.py" bring up four nodes "/turtlebot3\_node", "/hlds\_laser\_publisher", "/robot\_state\_publisher" and "/diff\_drive\_controller". 
+"/hlds\_laser\_publisher" starts up LDS1.0 and publishes the LiDAR data on the "/scan" topic. "/turtlebot3\_node" publishes five topics and subscribes to one. It subscribes to to "/cmd\_vel" converts it to wheel position and publishes "/joint\_states". The raw IMU data is picked up by the "turtlebot3\_node" and published on the ROS network under "/imu" topic. "/magnetic\_field", "sensor\_state" and "/battery\_state" are not used in this project. 
+"/diff\_drive\_controller" fuses "/imu" and "/joint\_states" and publish the fused odometry under "/odom". 
+"/robot\_state\_publisher" combines the URDF and "/joint\_states" for a complete description of the TB3 under "/robot\_description".
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 1\textwidth]{Figures/drawio/tb_sw.png}
+    \caption{TurtleBot3 software map}
+    \label{fig:TB3SW}
+\end{figure}
