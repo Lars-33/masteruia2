@@ -1,27 +1,11 @@
 \chapter{Introduction}
 
+The goal of this project is to develop an autonomous platooning system using a Husky Unmanned Ground Vehicle (UGV) and a TurtleBot3. The idea is to create a system where the TurtleBot3 can follow the Husky, while the Husky drives autonomously, creating a convoy or platoon of robots. This type of system has potential applications in various areas such as logistics, transportation, and search and rescue.
 
-Autonomous navigation is one of the most important objectives in mobile robotics. 
+To achieve this goal, the project will leverage the capabilities of ROS2, which is a popular open-source robotics framework that provides a flexible and modular architecture for developing robotic systems. ROS2 will be used for communication between the Husky and the TurtleBot3, allowing them to exchange data such as sensor measurements and control signals. This will enable the two robots to work together, with the Husky leading and the TurtleBot3 following behind.
 
-One of the common package for navigation in the ROS environment is the NAV 2. 
+To enable autonomous driving, the project will use the Navigation2 (NAV2) stack, which is a software framework for robot localisation, navigation and mapping. With NAV2, robots can achieve autonomous navigation by avoiding obstacles and staying on track.
 
-The aim of this project is to create a autonomous platooning system with an Husky UGV and a TurtleBot3. 
+This project consist of equipping TurtleBot3 and Husky with sensors and configure them to drive autonomously using ROS2 and NAV2. Examining different approaches to achieving autonomous platooning. The ones achieved will be tested and discussed.  
 
-
-
-The Husky is a ground vehicle from Clearpath. It has fire wheels, on each side the wheels are mechanically combined and is driven by one motor. Therefor the Huksy is an scid turning robot. The husky is a medium size robot with a footprint of 990mm x 670mm. 
-
-The TurtleBot3 is a small differential wheeled robot with the footprint of 138mm x 178mm. 
-
-A Nvidia Xavier AGX Developer Kit is the main computer for both. The software used to run autonomously is ROS2 Galactic with Nav2 running on Ubuntu 20.04.  
-The Nvidia Xavier AGX Developer Kit is an embedded computer choses for its efficient size and power consumption and its AI application. AI is not used in this project but can be relevant for future student continuing working with the Husky and the TurtleBot3. 
-Ubuntu is a OS based on the Linux kernal and one of the most popular Linux distributions. Its the preferred OS for ROS2 and therefor used here.
-ROS2 or Robot operating system is a large software platform for robotics. In this project ROS2 has provided comunication, hardware integration, visualization, navigation and more. 
-Nav2 is a powerful navigation system for robots that is built on top of ROS2. It includes a set of libraries and tools for performing various navigation tasks, such as localization, mapping, and path planning. When Nav2 i setup a robot can drive autonomous.
-
-The plan to achieve the goal of autonomous platooning is to setup the Husky and the TurtleBot3 with Nav2 independently. Create a custom Nav2 launch file so both can run Nav2 simultaneously on the same network. Then make a ROS2 node witch subscribe to the Husky position, use the Nav2 API to send a navigation goal to the TurtleBot3 behind the position of the Husky. It is import to mention this is not the only way to achieve autonomous platooning with these two robots, but its the plan for this project. 
-
-The Husky and the TurtleBot3 run with Nav2 independently, so the first subgoal was reached. The two other where not, but where look into. This is the result of learning while doing and its no secret that this project has some loos ends. 
-
-Both the Husky and the TurtleBot3 
-should run autonomous on its own to be able to avoid obstacles. 
+Overall, the development of an autonomous platooning system using a Husky UGV and a TurtleBot3 is an exciting and challenging project. Leveraging ROS2 and NAV2, the project will create a flexible and scalable system that can be adapted for various use cases and environments.

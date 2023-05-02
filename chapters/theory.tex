@@ -1,22 +1,53 @@
 \chapter{Theory on ...}
 
+\section{Autonomous platooning}
+Autonomous platooning is a technique used in transportation, where a group of vehicles travel closely together in a formation, with one vehicle leading the group and the others following. The leading vehicle is typically driven by a human driver or an autonomous system, and the following vehicles are autonomous and communicate with the leading vehicle to maintain the desired distance and speed. The purpose of autonomous platooning is to increase efficiency and safety on the roads. By traveling in a close formation, the vehicles can reduce their air resistance and save fuel. Additionally, the autonomous systems can react more quickly to changes in the road conditions, such as traffic congestion or accidents, reducing the risk of collisions and improving overall safety. Autonomous platooning is an active area of research, and several companies and research organizations are working on developing and testing platooning systems for a variety of vehicles, including trucks, buses, and passenger cars. 
+
 \section{Robotics}
-ekf, odometry, 
+Robotics is a vast and interdisciplinary field that involves the design, construction, operation, and use of robots. From manufacturing and transportation to healthcare and entertainment, robots are used in a wide range of industries and applications to automate tasks, enhance human capabilities, and explore new frontiers.
+In this particular project, the focus is on autonomous driving robots. 
+ 
+\subsection{Odometry}
+Odometry is the use of data from sensors on a mobile robot to estimate its motion, specifically its position and orientation changes over time. In robotics wheel encoders and Inertial Measurement Units (IMUs) are used as sensors. Estimates from wheel encoders struggles with various sources of error, such as slippage, uneven terrain and imperfect sensors. These errors can accumulate over time and result in significant deviations from the actual position and orientation of the robot[]. 
+IMUs are sensors that measure the linear and rotational motion of a robot by sensing changes in acceleration and angular velocity. Although IMUs are useful for providing real-time data on a robot's motion, they are also subject to various sources of error that can affect their accuracy, such as bias, noise, drift, and temperature changes. 
+To solve the problems with wheel encoders and IMUs, a common approach is to use sensor fusion techniques, which combine data from multiple sensors to obtain a more accurate estimate of the robot's position and orientation. One common method for sensor fusion is the Extended Kalman Filter (EKF). 
+
+\subsection{EKF filter}
+The EKF (Extended Kalman Filter) is a type of recursive Bayesian filter commonly used in robotics and control systems for estimating the state of a system with noisy sensor measurements. The EKF is an extension of the Kalman Filter that is designed to handle nonlinear systems by using a linear approximation of the system's dynamics and measurement functions around the current state estimate. The EKF estimates the system state by recursively updating a predicted state estimate using a model of the system's dynamics and the measurements received from sensors. The EKF also estimates the uncertainty of the state estimate using a covariance matrix, which is updated at each time step based on the predicted and measured uncertainties. The EKF is widely used in robotics applications, such as localization and mapping, where it can estimate the position and orientation of a robot based on noisy sensor data, such as GPS, IMU, or visual odometry.
 
 \section{Hardware}
-This could be a hardware list of 
-Here the hardware is shortly presented with details relevant for the project. 
+
+The hardware used in this thesis is presented in Table \ref{tab:HW_list}.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|c|c}
+        Name                    & Reference name    & Short description  \\ \hline
+        Clearpant Husky         & Husky             & Medium sized wheeled robot \\
+        Nvidia Xavier 1         & Xavier1           & Compact computer controlling the Husky\\
+        Ouster OS-1-64          & OS1               & 3D LiDAR on the Husky \\
+        UM7 Orientation Sensor  & UM7               & Inertial measurement unit(IMU)  \\
+        Husky's wheel encoder   & Wheel encoder     & Measures the movement of the wheels\\
+        TurtleBot3              & TB3               & Small sized wheeled robot   \\
+        Nvidia Xavier 2         & tb                & Compact computer Controlling TB3  \\
+        LDS-01                  & LDS-01            & 2D LiDAR on TB3
+        OpenCR 1.0              & OpenCR 1.0        & Microcontroller with IMU for robotics \\
+        
+    \end{tabular}
+    \caption{List of hardware}
+    \label{tab:HW_list}
+\end{table}
 
 \subsection{Xavier}
 Xavier or NVIDIA Jetson AGX Xavier Developer Kit is an compact computer for AI applications. With the size 105mm x 105mm x 65mm and the power source being 9 - 20 volts its practical for mobile robots. 
 
 The Nividia computers come with their own Linux version called JetPack, based on Ubuntu. The JetPack system includes AI applications. JetPack and the GPU is the reason why the Xavier is suitable for AI applications. The CPU of the Xavier has an ARM architecture. A WiFi module can be attached and is in this project.
 
-\subsection{LiDAR}
+\subsection{Sensors}
 
-LiDAR(laser imaging, detection, and ranging) is a method of measuring distances with laser. The principle is sending a laser beam at a target, sensing the reflection and calculating the distance based on time between laser sent and received. 
+\paragraph{LiDAR}(Laser imaging, Detection, and Ranging) is a method of measuring distances with laser. The principle is sending a laser beam at a target, sensing the reflection and calculating the distance based on time between laser sent and received. 
 
-TurtleBot3 uses a LiDAR called LDS-01, the Husky uses Ouster OS-1-64. Here is a table with relevant data for the LiDAR's. 
+TurtleBot3 uses a LiDAR called LDS-01 and the Husky uses Ouster OS-1-64. Table \ref{tab:lidar_data} provides relevant data for the LiDAR's. 
 
 \begin{table}[h]
     \centering
@@ -30,26 +61,13 @@ TurtleBot3 uses a LiDAR called LDS-01, the Husky uses Ouster OS-1-64. Here is a 
                                 & 5 volts           & 24 volts          \\ \hline
         Data line               & Micro USB         & Ethernet          \\       
     \end{tabular}
-    \caption{LiDAR data}
-    \label{tab:my_label}
+    \caption{LiDAR data\cite{lds01}}
+    \label{tab:lidar_data}
 \end{table}
 
-site : 
-https://emanual.robotis.com/docs/en/platform/turtlebot3/appendix_lds_01/
+\paragraph{Inertial Measurement Unit (IMU)} is an electronic device that uses accelerometers, gyroscopes, and sometimes magnetometers to measure and report a body's specific force, angular rate, and occasionally its orientation.
 
-
-\subsection{IMU}
-Inertial measurement unit(IMU) is an electronic device that measures and reports a body's specific force, angular rate, and sometimes the orientation of the body, using a combination of accelerometers, gyroscopes, and sometimes magnetometers. 
-(stjelt fra wiki : https://en.wikipedia.org/wiki/Inertial_measurement_unit#cite_note-1 ) 
-
-The Husky uses a IMU called UM7 uses USB for data and power. 
-The IMU of the TurtleBot3 is part of the OpenCR1.0. 
-
-\subsection{Rotary encoder}
-Rotary encoders are electro-mechanical devices that convert the angular position or rotation of a shaft into an electrical signal. They are commonly used in robotics, automation, and other control systems to measure the position and speed of rotating objects, such as wheels, motors, and joints. Rotary encoders typically consist of a rotating disk or shaft with evenly spaced markers or slots, and a stationary sensor or detector that reads the changes in the markers or slots as the shaft rotates. There are two main types of rotary encoders: incremental and absolute. Incremental encoders provide relative position and speed information, while absolute encoders provide absolute position information. Rotary encoders can be connected to a microcontroller or other processing unit to read and interpret the electrical signal, and use it to control the movement and position of a robot or other device.
-
-\subsection{EKF filter}
-The EKF (Extended Kalman Filter) is a type of recursive Bayesian filter commonly used in robotics and control systems for estimating the state of a system with noisy sensor measurements. The EKF is an extension of the Kalman Filter that is designed to handle nonlinear systems by using a linear approximation of the system's dynamics and measurement functions around the current state estimate. The EKF estimates the system state by recursively updating a predicted state estimate using a model of the system's dynamics and the measurements received from sensors. The EKF also estimates the uncertainty of the state estimate using a covariance matrix, which is updated at each time step based on the predicted and measured uncertainties. The EKF is widely used in robotics applications, such as localization and mapping, where it can estimate the position and orientation of a robot based on noisy sensor data, such as GPS, IMU, or visual odometry.
+\paragraph{Rotary encoders} are electro-mechanical devices that convert the angular position or rotation of a shaft into an electrical signal. They are commonly used in robotics, automation, and other control systems to measure the position and speed of rotating objects, such as wheels, motors, and joints. Rotary encoders typically consist of a rotating disk or shaft with evenly spaced markers or slots, and a stationary sensor or detector that reads the changes in the markers or slots as the shaft rotates. There are two main types of rotary encoders: incremental and absolute. Incremental encoders provide relative position and speed information, while absolute encoders provide absolute position information. Rotary encoders can be connected to a microcontroller or other processing unit to read and interpret the electrical signal, and use it to control the movement and position of a robot or other device.
 
 \subsection{Husky}
 The Husky UGV is an medium sized UGV(unmanned ground veichle) from Clearpath. It have fire wheels and a footprint of 990mm x 670mm. It is powered by two 24volts battery's in series, total 48 volts. There is three power outputs for external components 5V, 12V and 24V fused at 5A each. A motor drive and wheel where included, the mini-ITX and IMU where not. 
@@ -60,32 +78,21 @@ The front and back wheel of each side is mechanical connected, and power by one 
 The size and sciding of the Huksy combined with the range of the LiDAR can be an issue when driving autonomous with Nav2 inside. It acts clumsy with the turning blind zone under 80cm. 
 
 \subsection{TurtleBot3}
-The TurtleBot3(Waffle Pi) is small robot provided by Open Robotics and ROBOTIS. The footprint of the robot is 138mm x 178mm, its driven by two front wheels and have two ball casters in the back. Therefor the TurtleBot3 has differential drive, witch is a precise way to turn(site). 
+The TurtleBot3(Waffle Pi) is small robot provided by Open Robotics and ROBOTIS\cite{turtlebot3}. The footprint of the robot is 138mm x 178mm, its driven by two front wheels and have two ball casters in the back. Therefor the TurtleBot3 has differential drive, witch is a precise way to turn[]. 
 
-The OpenCR1.0 is a multi purpose board on the TurtleBot3. This board connects the battery, and powers the Xavier and motors for the wheels. The control signal for the wheels comes from the Xavier through the OpenCR1.0 int the wheels. 
+\paragraph{OpenCR1.0} is a multi purpose board on the TurtleBot3\cite{opencr10}. This board connects the battery, and powers the Xavier and motors for the wheels. The control signal for the wheels comes from the Xavier through the OpenCR1.0 int the wheels. 
 A LiDAR is included as well as an IMU on OpenCR1.0 board.
-
-site : 
-https://emanual.robotis.com/docs/en/platform/turtlebot3/features/#specifications
-
-\subsection{}
 
 \section{Software}
 
-The software used in this project is explained here. 
-
 \subsection{Ubuntu}
 
-Ubuntu is an open source operating system(OS) based on Linux. It the most popular Linux distribution and the main OS for ROS2. ROS2 can be used on Windows and Mac as well but is sub optimal. Ubuntu have two main forms desktop and server. Desktop provides a graphical user interface(GUI). Ubuntu server dose not have a GUI, it is just a text-based user interfaces(TUI). The server is more demands less possessing power and storage. 
+Ubuntu is an open source operating system(OS) based on Linux\cite{ubuntu}\cite{osi}. It the most popular Linux distribution and the main OS for ROS2. ROS2 can be used on Windows and Mac as well but is sub optimal. Ubuntu have two main forms desktop and server. Desktop provides a graphical user interface(GUI). Ubuntu server dose not have a GUI, it is just a text-based user interfaces(TUI). The server is more demands less possessing power and storage. 
 
-https://ubuntu.com/about
-https://opensource.org/docs/osd 
 
-\subsection{SSH}
+\paragraph{SSH} or Secure Shell is a network protocol for communication between two computers witch is encrypted. The two computers have to be on the same network. SSH is a terminal based program, therefor there is no GUI just a TUI. 
 
-SSH or Secure Shell is a network protocol for communication between two computers witch is encrypted. The two computers have to be on the same network. SSH is a terminal based program, therefor there is no GUI just a TUI. 
-
-In robotics SSH is commonly used. Often its not practical or possible to connect the robots computer to keyboard and a monitor. A lot of robots have computers running a TUI based OS, so a monitor wound not give more than SSH. 
+In robotics SSH is commonly used. Often its not practical or possible to connect the robots computer to keyboard and a monitor. A lot of robots have computers running a TUI based OS, so a monitor wound not provide more information than SSH. 
 
 \subsection{ROS2}
 
@@ -93,14 +100,12 @@ Robot operating system 2(ROS2) is a meta OS installed on top of an other OS. The
 
 \subsubsection{ROS2 components} 
 
-As mention ROS2 has different libraries and tools, here the relevant ones them will be explained. 
-
 A large part of ROS2 is communication with the messages. Messages refers to data this can be single variables like "int", "float", "string" and so on. Bigger data types like "Twist.msg" and "Odometry.msg" is also messages, this often contain hierarchy of data. 
 Here is a list of common ROS/ROS2 topics 
 \begin{table}[H]
     \centering
     \begin{tabular}{c|c}
-       Topic name       &  Function         \\ \hline
+       Topic name       & Function          \\ \hline
         /cmd\_vel       & Velocity command  \\
         /odom           & Odometer          \\
         /scan           & 2D laser scan     \\
@@ -128,6 +133,3 @@ In bigger ROS2 project there is often a lot of different hardware that needs to 
 \paragraph{Nav2}
 Nav2 (Navigation Stack 2) is a high-level open-source software framework for autonomous robot navigation in ROS2. It provides a set of reusable and configurable software components for creating complex navigation behaviors for mobile robots, including path planning, localization, obstacle avoidance, and control. Nav2 is built on top of the ROS2 middleware and leverages other ROS2 packages for communication and hardware abstraction. It also provides interfaces for integrating with other navigation systems and tools, such as Gazebo and RViz. Nav2 is designed to be modular and extensible, allowing developers to customize and add new navigation behaviors to meet the specific requirements of their robots and environments.
 
-\section{Autonomous platooning}
-
-Autonomous platooning is a technique used in transportation, where a group of vehicles travel closely together in a formation, with one vehicle leading the group and the others following it. The leading vehicle is typically driven by a human driver or an autonomous system, and the following vehicles are autonomous and communicate with the leading vehicle to maintain the desired distance and speed. The purpose of autonomous platooning is to increase efficiency and safety on the roads. By traveling in a close formation, the vehicles can reduce their air resistance and save fuel. Additionally, the autonomous systems can react more quickly to changes in the road conditions, such as traffic congestion or accidents, reducing the risk of collisions and improving overall safety. Autonomous platooning is an active area of research, and several companies and research organizations are working on developing and testing platooning systems for a variety of vehicles, including trucks, buses, and passenger cars. 

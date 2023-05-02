@@ -1,5 +1,10 @@
 \chapter{Discussions}
 
-Xavier
+\paragraph{Xavier}
 In this project AI is not used, but can be useful for student in the future working on the same platforms. The JetPack and GPU is useless in this project. The Xavier uses ARM, and x86-64 is most used CPU architecture. Since more people are using x86-64 there are more help and software available online. 
 It could be that the Xavier is amazing at AI applications and there is no product like it, i don't know. For the future i would recommend x86-64 CPU, no GPU and pure Ubuntu. A GPU dosen't hurt but not necessary unless the PC on the robot is going to run simulations or AI. Pure Ubuntu is preferable for a bigger community, faster updates and less bloat. 
+
+\paragraph{Mimic} is not suited for autonomous platooning it works in a straigth line, if the leader turns the follower will turn at the same time and fail to follow the right path. 
+
+\paragraph{Time delay} is not suited for autonomous platooning. In theory the the follower should copy the leader just later in time. This means if the leader stops for more that the time delay follower and leader will collide. Even though same velocity command should result in theory create the same movement for two different robots it dose not in practice. It will accumulate errors over time and drift out of the path. 
+
