@@ -1,11 +1,12 @@
 \chapter{Theory on ...}
-
-\section{Autonomous platooning}
-Autonomous platooning is a technique used in transportation, where a group of vehicles travel closely together in a formation, with one vehicle leading the group and the others following. The leading vehicle is typically driven by a human driver or an autonomous system, and the following vehicles are autonomous and communicate with the leading vehicle to maintain the desired distance and speed. The purpose of autonomous platooning is to increase efficiency and safety on the roads. By traveling in a close formation, the vehicles can reduce their air resistance and save fuel. Additionally, the autonomous systems can react more quickly to changes in the road conditions, such as traffic congestion or accidents, reducing the risk of collisions and improving overall safety. Autonomous platooning is an active area of research, and several companies and research organizations are working on developing and testing platooning systems for a variety of vehicles, including trucks, buses, and passenger cars. 
-
 \section{Robotics}
 Robotics is a vast and interdisciplinary field that involves the design, construction, operation, and use of robots. From manufacturing and transportation to healthcare and entertainment, robots are used in a wide range of industries and applications to automate tasks, enhance human capabilities, and explore new frontiers.
-In this particular project, the focus is on autonomous driving robots. 
+In this particular project, the focus is on autonomous driving robots. To achieve autonomous driving in this project the robots used motion estimate(odometry), vision(LiDAR) and software(ROS2 and Nav2). 
+
+\subsection{Autonomous platooning}
+Autonomous platooning is a technique used in transportation, where a group of vehicles travel closely together in a formation, with one vehicle leading the group and the others following. The leading vehicle is typically driven by a human driver or an autonomous system, and the following vehicles are autonomous and communicate with the leading vehicle to maintain the desired distance and speed. The purpose of autonomous platooning is to increase efficiency and safety on the roads. By traveling in a close formation, the vehicles can reduce their air resistance and save fuel. Additionally, the autonomous systems can react more quickly to changes in the road conditions, such as traffic congestion or accidents, reducing the risk of collisions and improving overall safety. Autonomous platooning is a part of robotics.
+
+
  
 \subsection{Odometry}
 Odometry is the use of data from sensors on a mobile robot to estimate its motion, specifically its position and orientation changes over time. In robotics wheel encoders and Inertial Measurement Units (IMUs) are used as sensors. Estimates from wheel encoders struggles with various sources of error, such as slippage, uneven terrain and imperfect sensors. These errors can accumulate over time and result in significant deviations from the actual position and orientation of the robot[]. 
@@ -30,7 +31,7 @@ The hardware used in this thesis is presented in Table \ref{tab:HW_list}.
         Husky's wheel encoder   & Wheel encoder     & Measures the movement of the wheels\\
         TurtleBot3              & TB3               & Small sized wheeled robot   \\
         Nvidia Xavier 2         & tb                & Compact computer Controlling TB3  \\
-        LDS-01                  & LDS-01            & 2D LiDAR on TB3
+        LDS-01                  & LDS-01            & 2D LiDAR on TB3 \\
         OpenCR 1.0              & OpenCR 1.0        & Microcontroller with IMU for robotics \\
         
     \end{tabular}
@@ -70,7 +71,7 @@ TurtleBot3 uses a LiDAR called LDS-01 and the Husky uses Ouster OS-1-64. Table \
 \paragraph{Rotary encoders} are electro-mechanical devices that convert the angular position or rotation of a shaft into an electrical signal. They are commonly used in robotics, automation, and other control systems to measure the position and speed of rotating objects, such as wheels, motors, and joints. Rotary encoders typically consist of a rotating disk or shaft with evenly spaced markers or slots, and a stationary sensor or detector that reads the changes in the markers or slots as the shaft rotates. There are two main types of rotary encoders: incremental and absolute. Incremental encoders provide relative position and speed information, while absolute encoders provide absolute position information. Rotary encoders can be connected to a microcontroller or other processing unit to read and interpret the electrical signal, and use it to control the movement and position of a robot or other device.
 
 \subsection{Husky}
-The Husky UGV is an medium sized UGV(unmanned ground veichle) from Clearpath. It have fire wheels and a footprint of 990mm x 670mm. It is powered by two 24volts battery's in series, total 48 volts. There is three power outputs for external components 5V, 12V and 24V fused at 5A each. A motor drive and wheel where included, the mini-ITX and IMU where not. 
+The Husky UGV \cite{huskyugv} is an medium sized UGV(unmanned ground veichle) from Clearpath. It have fire wheels and a footprint of 990mm x 670mm. It is powered by two 24volts battery's in series, total 48 volts. There is three power outputs for external components 5V, 12V and 24V fused at 5A each. A motor drive and wheel where included, the mini-ITX and IMU where not. 
 
 The front and back wheel of each side is mechanical connected, and power by one motor. Therefor in able to turn the Huksy will scid, this makes the turning and odometry prediction form the wheel encoders inaccurate. 
 (This makes the odometry more dependent on the IMU and should be in mind when tuning the ekf filter or similar data fusing methods.) 
@@ -78,7 +79,7 @@ The front and back wheel of each side is mechanical connected, and power by one 
 The size and sciding of the Huksy combined with the range of the LiDAR can be an issue when driving autonomous with Nav2 inside. It acts clumsy with the turning blind zone under 80cm. 
 
 \subsection{TurtleBot3}
-The TurtleBot3(Waffle Pi) is small robot provided by Open Robotics and ROBOTIS\cite{turtlebot3}. The footprint of the robot is 138mm x 178mm, its driven by two front wheels and have two ball casters in the back. Therefor the TurtleBot3 has differential drive, witch is a precise way to turn[]. 
+The TurtleBot3(Waffle Pi) is small robot provided by Open Robotics and ROBOTIS \cite{turtlebot3}. The footprint of the robot is 138mm x 178mm, its driven by two front wheels and have two ball casters in the back. Therefor the TurtleBot3 has differential drive, witch is a precise way to turn[]. 
 
 \paragraph{OpenCR1.0} is a multi purpose board on the TurtleBot3\cite{opencr10}. This board connects the battery, and powers the Xavier and motors for the wheels. The control signal for the wheels comes from the Xavier through the OpenCR1.0 int the wheels. 
 A LiDAR is included as well as an IMU on OpenCR1.0 board.
@@ -94,14 +95,12 @@ Ubuntu is an open source operating system(OS) based on Linux\cite{ubuntu}\cite{o
 
 In robotics SSH is commonly used. Often its not practical or possible to connect the robots computer to keyboard and a monitor. A lot of robots have computers running a TUI based OS, so a monitor wound not provide more information than SSH. 
 
-\subsection{ROS2}
-
-Robot operating system 2(ROS2) is a meta OS installed on top of an other OS. The OS most commonly used is Ubuntu. ROS2 can be described as a base for building robot applications with a set of software libraries and tools. ROS2 is open source and has a large community, this is essential. The large community means that a its a lot of help online. Open source makes is easier to make ROS2 software to different hardware. 
+\subsection{ROS2} or robot operating system 2 \cite{rosfoxydocs} is a meta OS installed on top of an other OS. The OS most commonly used is Ubuntu. ROS2 can be described as a base for building robot applications with a set of software libraries and tools. ROS2 is open source and has a large community, this is essential. The large community means that a its a lot of help online. Open source makes is easier to make ROS2 software to different hardware. 
 
 \subsubsection{ROS2 components} 
 
 A large part of ROS2 is communication with the messages. Messages refers to data this can be single variables like "int", "float", "string" and so on. Bigger data types like "Twist.msg" and "Odometry.msg" is also messages, this often contain hierarchy of data. 
-Here is a list of common ROS/ROS2 topics 
+Table \ref{tab:ROS2_topics} shows list of common ROS/ROS2 topics.
 \begin{table}[H]
     \centering
     \begin{tabular}{c|c}
@@ -109,27 +108,60 @@ Here is a list of common ROS/ROS2 topics
         /cmd\_vel       & Velocity command  \\
         /odom           & Odometer          \\
         /scan           & 2D laser scan     \\
-        /PointCloud2    & 3D laser scan     \\
+        /points         & 3D laser scan     \\        
         /imu/data       & IMU data          \\
     \end{tabular}
     \caption{Caption}
-    \label{tab:my_label}
+    \label{tab:ROS2_topics}
 \end{table}
 
-The standard topic names are convenient but can cause problems when there is multiple types of the same sensor. Namespace solves this problem by putting "/namespace" in front of "/generic\_topic\_name".  
+The standard topic names are convenient but can cause problems when there is multiple types of the same sensor. Namespace solves this problem by putting "/namespace" in front of \topic{/generic\_topic\_name}.  
 
-\paragraph{Nodes}
-A node in ROS2 is a lightweight and modular process that performs a specific computation. Each node is identified by a unique name within the ROS2 system. Nodes communicate with each other by publishing messages to topics or subscribing to topics to receive messages. Nodes can also communicate with each other using services, which provide a request/response communication pattern. ROS2 nodes can also communicate with each other using actions, which provide a more complex form of request/response communication pattern that involves feedback and cancellation. 
+\paragraph{Nodes} in ROS2 is a lightweight and modular process that performs a specific computation. Each node is identified by a unique name within the ROS2 system. 
+ROS2 nodes can be described by what they are commonly used for. 
 
-\paragraph{Launch files} is a file for 
-In bigger ROS2 project there is often a lot of different hardware that needs to be stated or launched to start a complete robot. Python launch files is a script for launching multiple nodes and send arguments into them. Launch files can also launch other launch files, convenient because this is often provided with complete robots. 
+\begin{itemize}
+    \item Publish sensor data: A ROS node can read data from sensors, such as cameras or lidars, and publish it to a ROS topic for other nodes to consume like \topic{/scan} and \topic{/points}.
+    
+    \item Control a robot: A ROS node can send commands to a robot's motors or actuators to control its movement or behavior based on topics like \topic{/cmd\_vel}.
+    
+    \item Process data: A ROS node can receive data from other nodes and perform calculations or transformations on it, such as filtering or mapping for example a EKF filter node.
+    
+    \item Provide a user interface: A ROS node can provide a graphical user interface (GUI) or command-line interface (CLI) for users to interact with the system like teleop or Rviz.
+    
+    \item Manage communication: A ROS node can act as a bridge between different communication protocols or systems, allowing them to exchange data using ROS messages.
+    
+\end{itemize}
+
+Nodes communicate with each other by publishing messages to topics or subscribing to topics to receive messages. Nodes can also communicate with each other using services, which provide a request/response communication pattern. ROS2 nodes can also communicate with each other using actions, which provide a more complex form of request/response communication pattern that involves feedback and cancellation. Nodes can be started up directly for the terminal or a launch file. 
+
+\paragraph{Launch files} is needed in bigger ROS2 project where there is often a lot of different hardware that needs to be stated or launched to start a complete robot. Python or xml launch files is a script for launching multiple nodes and send arguments into them. Launch files can also launch other launch files, convenient because this is often provided with complete robots. 
+
+\paragraph{ROS arguments} can be passed into nodes and launch files, and alter the way they work. What type of arguments is available depends on the function of the node or launch file. Arguments can be passed directly into nodes in the terminal like this : 
+\begin{lstlisting}[language=bash]
+  ros2 run demo_nodes_cpp talker --ros-args -r __ns:=/namespace
+\end{lstlisting}
+Nodes can also resive arguments in a launch file like this: 
+\lstinputlisting[language=Python]{code/talker_launch.py}
+
+For launch files argument function the same way just a bit different syntax. To check if arguments can be bassed into a launch file write --show-args at the end of the launch command, for example: 
+\begin{lstlisting}[language=bash]
+  ros2 launch turtlebot3_bringup robot.launch.py --show-args
+\end{lstlisting}
+
+\paragraph{Parameter files} is a .yaml file with multiple arguments or configurations. Often parameter files can be passed in as an argument.
+
+\paragraph{ROS2 packages} is a standard way to structure ROS2 code, making it essay integrate custom code into ROS2 and share it. A typical ROS2 package contains nodes, launch files and parameter files. 
 
 \paragraph{rqt} is a visualisation tool for ROS2. It provides a map of nodes and topics on the local network. This is a great tool for debugging. 
 
-\paragraph{Gazebo} is a physics-based simulator for testing and developing robotics algorithms. It uses models to represent robots and objects in the simulated environment. Gazebo supports a plugin system for extending its functionality. It provides a GUI for visualizing and interacting with the simulation.  
+\paragraph{Gazebo} is a physics-based simulator for testing and developing robotics algorithms. It uses models to represent robots and objects in the simulated environment. Gazebo supports a plugin system for extending its functionality. It provides a GUI for visualizing and interacting with the simulation, witch also works great with Rviz.
 
 \paragraph{Rviz} is a 3D visualization tool for ROS that allows users to view and interact with robot data in real-time. It can display data such as point clouds, laser scans, and 3D models of robots and their environments. Rviz allows users to change the perspective of the visualization and interact with the data using mouse and keyboard commands. It can also be used to configure sensors and other components of a robot system by visualizing their data and properties. In summary, Rviz is a powerful 3D visualization tool for ROS that allows users to interact with robot data in real-time and visualize sensor data and properties.
 
-\paragraph{Nav2}
-Nav2 (Navigation Stack 2) is a high-level open-source software framework for autonomous robot navigation in ROS2. It provides a set of reusable and configurable software components for creating complex navigation behaviors for mobile robots, including path planning, localization, obstacle avoidance, and control. Nav2 is built on top of the ROS2 middleware and leverages other ROS2 packages for communication and hardware abstraction. It also provides interfaces for integrating with other navigation systems and tools, such as Gazebo and RViz. Nav2 is designed to be modular and extensible, allowing developers to customize and add new navigation behaviors to meet the specific requirements of their robots and environments.
+\paragraph{teleop_twist_keyboard} or just teleop is a build in tool in ROS2 for controlling robots from the keyboard. It dose this by publishing velocity control from keyboard input on the "/cmd\_vel" topic.   
+
+\paragraph{Nav2} (Navigation Stack 2) \cite{rosnavigation} is a high-level open-source software framework for autonomous robot navigation in ROS2. It provides a set of reusable and configurable software components for creating complex navigation behaviors for mobile robots, including path planning, localization, obstacle avoidance, and control. Nav2 is built on top of the ROS2 middleware and leverages other ROS2 packages for communication and hardware abstraction. It also provides interfaces for integrating with other navigation systems and tools, such as Gazebo and RViz. Nav2 is designed to be modular and extensible, allowing developers to customize and add new navigation behaviors to meet the specific requirements of their robots and environments.
+
+Nav2 API(application programming interface)\cite{rosnavAPI} is a set of commands for interacting with Nav2 from Python. Examples of commands can be send a goal, receive position and check if a task (rout) is complete.    
 
