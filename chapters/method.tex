@@ -22,49 +22,63 @@ In the Husky there are two Xavier only one of them is used in this project. The 
 The Ouster LiDAR has two components the laser scanner and the power/data brick. The scanner is mounted on top of a aluminum frame in the front for long distance scanning. The brick is blued to the front wall off the tray, connected to 24 volt barrel jack and Ethernet form the router. 
 The router is mounted in the front of the aluminum frame powered by 12 volt barrel jack. Xavier and Xavier2 is connected with Ethernet, Xavier also has a WiFi connection. 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width = 0.5\textwidth]{Figures/drawio/Husky_HW.drawio.png}
+  \centering
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=\textwidth]{Figures/images/husky_irl.jpg}
+    \caption{Photo of Husky}
+    \label{fig:husky_irl}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.59\textwidth}
+    \includegraphics[width=\textwidth]{Figures/drawio/Husky_HW.drawio.png}
     \caption{Husky hardware map, this dose not include components on the Husky used in other projects}
     \label{fig:Husky_HW}
+  \end{minipage}
 \end{figure}
 
 \subsection{Software}
-This section will describe thee setup of the Husky without Nav2, the "base" setup of the Husky.
+This section will describe thee setup of the Husky without Nav2, the "base" setup of the Husky. For less comfusion all \topic{topics} and \node{nodes} have colors and there ROS2 name 
 The Xavier1 on the Husky is runnning Ubuntu 20.04 Desktop \cite{ubuntu20_04} with ROS2 foxy \cite{rosfoxyinstall} and galactic \cite{rosgalacticinstall}, Nav2 binary \cite{rosnavinstall}, Husky foxy Debian packages \cite{huskyinstall} and $uia\_husky\_0776$ \cite{uiahusky}. When setting up the ROS2 software Rviz and rqt was used to test all components. 
 
 
-$uia\_husky\_0776$ includes packages for Husky, OS1, UM7 and "pointcloud\_to\_laserscan". A launch file was made to launch it all at once "husky.launch.py" in "uia\_husky\_0776/husky\_group/launch/".
+$uia\_husky\_0776$ includes packages for Husky, OS1, UM7 and $pointcloud\_to\_laserscan$. A launch file was made to launch it all at once "husky.launch.py" in "uia\_husky\_0776/husky\_group/launch/".
 
 
-Clearpath provides binary packages for the Husky in ROS2 foxy, because of this the hole project was set up foxy. The Clearpath packages provides the essential software for making the husky move with ROS2. To start up the Husky lunch "base\_launch.py" from "husky\_base/launch". "base\_launch.py" starts up the nodes \node{/joy\_teleop}, \node{/twist\_mux}, \node{/huksy\_velocity\_controller} and \node{/ekf\_node}. 
+Clearpath provides binary packages for the Husky in ROS2 foxy, because of this the hole project was set up foxy in the beginning . The Clearpath packages provides the essential software for making the husky move with ROS2.
+
+An other project on the Husky was pick and place and used the ViperX 300 Robot Arm. This arm was better to set up with Galactic, so the project was converted to Galactic. Foxy and Galactic are similar and didn't cause any issues, except for with the Husky package. Clearpath did not provide binary packages for the Husky in Galactic just source. This source files did not initially work on the Husky. The student working on pick and place made some changes to the source files, making them work. Still the source files on Galactic are more unstable then Foxy. Therefor "base\_launch.py" is launched in Foxy and the rest of the project in Galactic. 
+
+The Husky is launched with the $husky.launch.py$ from $husky\_group$ in the $uia\_husky\_0776$. $husky.launch.py$ pass in parameters and starts $base\_launch.py$, \node{um7\_node}, $os1_launch.py$ and \node{pointcloud\_to\_laserscan}. 
+
+$base\_launch.py$ starts up the /joy\_teleop and /robot\_state system and the nodes \node{/twist\_mux}, \node{/huksy\_velocity\_controller} and \node{/ekf\_node}. 
 
 \begin{itemize}
-    \item \node{joy\_teleop} converts a Logitech joystick controllers signal into \topic{joy\_teleop/cmd\_vel} a standard velocity massage with namespace. 
+    \item joy\_teleop system converts a Logitech joystick controllers signal into \topic{joy\_teleop/cmd\_vel} a standard velocity massage with namespace. 
     
-    \item \node{/twist\_mux} converts \topic{/cmd\_vel} with and without namespaces to 
+    \item \node{/twist\_mux} converts \topic{/cmd\_vel} with and without namespaces to \topic{/husky\_velocity\_controller/cmd\_vel\_unstamped} and sends it into \node{/huksy\_velocity\_controller}. Every velocity command for the Husky goes though the \node{/twist\_mux}, joystick, keyboard and Nav2. 
     
-    \topic{/husky\_velocity\_controller/cmd\_vel\_unstamped} and sends it into \node{/huksy\_velocity\_controller}. Every velocity command for the Husky goes though the \node{/twist\_mux}, joystick, keyboard and Nav2. 
-
     \item \node{/huksy\_velocity\_controller} controlles the motors and publishes \topic{/odom} based on the wheel encounters on the Husky. 
-
+    
     \item \node{/ekf\_node} fuses odometry(\topic{/odom}) and IMU(\topic{/imu/data}) to \topic{"/odometry/filtered"} to localize the Husky with greater precision[need a cite?]. 
+    
+    \item The /robot\_state system combines the URDF with the joint state of the wheels to create a accurate model of the Husky in Rviz. 
+    
 \end{itemize}
 
-
-An other project on the Husky was pick and place and used the ViperX 300 Robot Arm. This arm was better to set up with Galactic, so the project was converted to Galactic. Foxy and Galactic are similar and didn't cause any issues, except for with the "base\_launch.py". Clearpath did not provide binary packages for the Husky in Galactic just source. This source files did not initially work on the Husky. The student working on pick and place made some changes to the source files, making them work. Still the source files on Galactic are more unstable then Foxy. Therefor "base\_launch.py" is launched in Foxy and the rest of the project in Galactic. 
-\\ \newline
 The UM7 ROS2 package where found on GitHub \cite{um7imu}. This packages launches a node called \node{/um7\_dirver} publishing data from the IMU on topic \topic{/imu/data}, into \node{/ekf\_node}.
 \\ \newline
-Ouster has a well documented GitHub \cite{ousterros} with ROS2 drivers for there hardware, including the OS1. The package starts up a node called \node{/ouster\_driver} witch publishes \topic{/points}. Since Nav2 uses \topic{/scan} as perception topic, a packages called "pointcloud\_to\_laserscan" was installed to make the OS1 communicate with Nav2. "pointcloud\_to\_laserscan" was also found on GitHub \cite{pcl2laser}. 
+Ouster has a well documented GitHub \cite{ousterros} with ROS2 drivers for there hardware, including the OS1. The package starts up a node called \node{/ouster\_driver} witch publishes \topic{/points}. 
+Since Nav2 uses \topic{/scan} as perception topic, a packages called "pointcloud\_to\_laserscan" \cite{pcl2laser} was installed to make the OS1 communicate with Nav2. "pointcloud\_to\_laserscan" was also found on GitHub . 
 
-This image represents software of the Husky in a rqt format where ovals are nodes and squares is topics. This dose not include Nav2. 
+This image represents software of the Husky in a rqt format where 
+ovals are \node{nodes} and squares is \topic{topics}. This dose not include Nav2. The original rqt image can be found here \ref{Appendix:HuskySWmap}. 
+
 \begin{figure}[H]
     \centering
-    \includesvg[width = 1\textwidth]{Figures/drawio/Husky_SW5.svg}
+    \includegraphics[width = 1\textwidth]{Figures/drawio/husky_rqt.drawio.png}
     \caption{Husky software map}
     \label{fig:HuskySW}
 \end{figure}
-
 
 \section{TurtleBot3}
 \subsection{Hardware}
