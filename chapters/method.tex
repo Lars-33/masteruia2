@@ -1,18 +1,26 @@
-\chapter{Methods in ...}
+\chapter{Methods in ...} %aj material and method
 
+%aj 3.1 experiment setup
+%3.2 methodology
+%3.2.1  autonomous navigation of husky
+%3.2.2 autonomous navigation of tb
+%3.2.3 mimic algorithm
+%3.2.4 platooning
+
+%aj first para(s) should be without section where you explain what is in the chapter. write about the  algorithm (a) imitation/mimic and (b) paltooning
 \section{Introduction of method}
 In this chapter the setup of Husky and TB3 both hardware and software will be explained. Then how both where setup to drive autonomous independently. Lastly the platooning algorithms will be explained. 
 
-
+%aj remove. good for handover
 Before getting into the setup of Husky and TB3 it is necessary to explain the the custom packages made for this project $masteruia$ \cite{masteruia} and $uia\_husky\_0776$ \cite{uiahusky}. 
 
-There where three project on the Husky at the same time, so a common GitHub was made $uia\_husky\_0776$. All the software used by the Husky in this project is included in $uia\_husky\_0776$ such as packages for Husky, OS1, UM7 and "pointcloud\_to\_laserscan".
+There where three project on the Husky at the same time, so a common GitHub was made $uia\_husky\_0776$. All the software used by the Husky in this project is launched from the $uia\_husky\_0776$ such as packages for Husky, OS1, UM7 and "pointcloud\_to\_laserscan".
 
 $masteruia$ is the other GitHub used in the project and contains two packages $uia\_husky\_0776$ and $tb3\_cpp$.
 First off the folder called $uia\_husky\_0776$ is a copy of the one talked about above. The folder was made when trying to launch the Husky with namespace, this task was not completed. 
 The $tb3\_cpp$ is standard ROS2 CMake package consisting a launch file for TB3, nodes for Nav2 API and platooning algorithm. 
                       
-
+%aj suggest to follow the above structure. the content aslo has to be rewritten. mention about UGV, sensors - lidar, IMU, computing platform - xavier 1 .
 \section{Husky}
 \subsection{Hardware}
 This section will describe the setup of the Husky and its components. 
@@ -35,19 +43,24 @@ The router is mounted in the front of the aluminum frame powered by 12 volt barr
     \label{fig:Husky_HW}
   \end{minipage}
 \end{figure}
-
+%aj font size needs to be increased, its not redable
 \subsection{Software}
-This section will describe thee setup of the Husky without Nav2, the "base" setup of the Husky. For less comfusion all \topic{topics} and \node{nodes} have colors and there ROS2 name 
-The Xavier1 on the Husky is runnning Ubuntu 20.04 Desktop \cite{ubuntu20_04} with ROS2 foxy \cite{rosfoxyinstall} and galactic \cite{rosgalacticinstall}, Nav2 binary \cite{rosnavinstall}, Husky foxy Debian packages \cite{huskyinstall} and $uia\_husky\_0776$ \cite{uiahusky}. When setting up the ROS2 software Rviz and rqt was used to test all components. 
-
-
-$uia\_husky\_0776$ includes packages for Husky, OS1, UM7 and $pointcloud\_to\_laserscan$. A launch file was made to launch it all at once "husky.launch.py" in "uia\_husky\_0776/husky\_group/launch/".
+This section will describe thee setup of the Husky without Nav2, the 
+%aj the section describes (not will describe)
+"base" setup of the Husky. For less comfusion all \topic{topics} and \node{nodes} have colors and there ROS2 name. 
+The Xavier1 on the Husky is runnning Ubuntu 20.04 Desktop
+%since you use only one xavier call it xavier
+\cite{ubuntu20_04} with ROS2 foxy \cite{rosfoxyinstall} and galactic \cite{rosgalacticinstall}, Nav2 binary \cite{rosnavinstall}, Husky foxy Debian packages \cite{huskyinstall} and $uia\_husky\_0776$ \cite{uiahusky}. When setting up the ROS2 software Rviz and rqt was used to test all components. \newline
+    
+$uia\_husky\_0776$ launches packages for Husky, OS1, UM7 and $pointcloud\_to\_laserscan$. A launch file was made to launch it all at once "husky.launch.py" in "uia\_husky\_0776/husky\_group/launch/".
 
 
 Clearpath provides binary packages for the Husky in ROS2 foxy, because of this the hole project was set up foxy in the beginning . The Clearpath packages provides the essential software for making the husky move with ROS2.
 
+%aj why write about another project?
 An other project on the Husky was pick and place and used the ViperX 300 Robot Arm. This arm was better to set up with Galactic, so the project was converted to Galactic. Foxy and Galactic are similar and didn't cause any issues, except for with the Husky package. Clearpath did not provide binary packages for the Husky in Galactic just source. This source files did not initially work on the Husky. The student working on pick and place made some changes to the source files, making them work. Still the source files on Galactic are more unstable then Foxy. Therefor "base\_launch.py" is launched in Foxy and the rest of the project in Galactic. 
 
+%aj need to understand what you have used
 The Husky is launched with the $husky.launch.py$ from $husky\_group$ in the $uia\_husky\_0776$. $husky.launch.py$ pass in parameters and starts $base\_launch.py$, \node{um7\_node}, $os1_launch.py$ and \node{pointcloud\_to\_laserscan}. 
 
 $base\_launch.py$ starts up the /joy\_teleop and /robot\_state system and the nodes \node{/twist\_mux}, \node{/huksy\_velocity\_controller} and \node{/ekf\_node}. 
@@ -73,24 +86,37 @@ Since Nav2 uses \topic{/scan} as perception topic, a packages called "pointcloud
 This image represents software of the Husky in a rqt format where 
 ovals are \node{nodes} and squares is \topic{topics}. This dose not include Nav2. The original rqt image can be found here \ref{Appendix:HuskySWmap}. 
 
+% this should be at the beginning and then eplain this figure in detail
 \begin{figure}[H]
     \centering
     \includegraphics[width = 1\textwidth]{Figures/drawio/husky_rqt.drawio.png}
     \caption{Husky software map}
     \label{fig:HuskySW}
 \end{figure}
+% images neeed to be refrenced 
 
+%aj use simple present. also write what you have done. All the failed attempt goes to discussion
 \section{TurtleBot3}
 \subsection{Hardware}
 The TurtleBot3 started with no battery and was driven by a Raspberry Pi. The Pi was running Ubuntu Server and had an old student project saved. It had performance issues, writing in the TUI was choppy. The Pi was flashed with Ubuntu Server 20.04 in an attempt to increase the performance. This did not work, and therefor it was decided tho switch out the Pi. A Xavier was available, it is same as the Husky is using and was therefor chosen. The TurtleBot3 uses a battery similar to RC Cars, RC battery's was ordered though a local hobby store. Figure \ref{fig:TB3Hardware} shows the map of the TB3 hardware. 
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width = 0.5\textwidth]{Figures/drawio/TB_HW.drawio.png}
+  \centering
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=\textwidth]{Figures/images/TB3_irl.png}
+    \caption{Photo of TB3}
+    \label{fig:TB3_irl}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.59\textwidth}
+    \includegraphics[width=\textwidth]{Figures/drawio/TB_HW.drawio.png}
     \caption{TurtleBot3 hardware map}
-    \label{fig:TB3Hardware}
+    \label{fig:TB3HW}
+  \end{minipage}
 \end{figure}
 
+
+%aj need to discuss to understand better. I guess fig 3.6 and 3.7 should be demonstrated first and explain them.
 \subsection{Software}
 
 This will describe the setup of the TB3 without Nav2, the "base" setup TB3.  
@@ -107,8 +133,14 @@ The "robot.launch.py" from the TB3 packages is the file used for launch the TB3 
     \caption{TurtleBot3 software map}
     \label{fig:TB3SW}
 \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 1\textwidth]{Figures/drawio/TB3_ns_rqt.drawio.png}
+    \caption{TurtleBot3 with namespace software map}
+    \label{fig:TB3nsSW}
+\end{figure}
 
-To achieve namespace like in Figure \ref{fig:TB3SW} $tb3\_cpp$ package was made in the $masteruia$ GitHub \cite{masteruia}. This contains three folders launch, params and src. In launch the "tb3\_launch.py" is the only one used the rest is leftovers from working. "tb3\_launch.py" is  a launch file based on using the "robot.launch.py" from "turtlebot3\_bringup" \cite{turtlebot3galactic} to launch the TB3. Here is how it works in order: 
+To achieve namespace like in Figure \ref{fig:TB3nsSW} $tb3\_cpp$ package was made in the $masteruia$ GitHub \cite{masteruia}. This contains three folders launch, params and src. In launch the "tb3\_launch.py" is the only one used the rest is leftovers from working. "tb3\_launch.py" is  a launch file based on using the "robot.launch.py" from "turtlebot3\_bringup" \cite{turtlebot3galactic} to launch the TB3. Here is how it works in order: 
 \begin{enumerate}
 \item Exporting "TURTLEBOT3\_MODEL" is required by "robot.launch.py" 
 \item Opens access to LiDAR and OpenCR1.0 
@@ -121,6 +153,7 @@ The "params" folder is full of work leftovers except for "tb3\_param.yaml" witch
 
 Last folder "src" contains nodes from this project. "cmd\_vel\_subpub\_v1.py is the algorithm Time Delay \ref{Platooning_algorithm}. "feedback.py", "nav2.py", "pose\_pub\_v*.py" and "pose\_sub\_v*.py" is nodes used when attempting to use Nav2 API for a platooning algorithm \ref{Platooning_algorithm}.
 
+%aj algorithm required or flowchart here. The implementation explained can be moved to appendix 
 \section{Autonomous driving on Husky and TB3 independently}
 Both robots where set up to drive autonomous and is able to do so independently. In the beginning it was thought this was necessary to archive autonomous platooning. There where two ways the robots could drive autonomous with and without a pre made map. 
 
@@ -170,11 +203,17 @@ Terminal 3, note custom parameter file.
 
 Navigating with a pre made map uses the same setup for the robots, but SLAM is not launched and the localization\_launch.py is used inserted of navigation\_launch.py. The map is passed into localization\_launch.py as a argument. Map can be made using SLAM with navigation or telop. 
 
+% basically you are doing (a) mimic and (b) platooning. so keep section name -algorithm and sub section / paragraph as mimic and platooning
 \section{Platooning algorithm} \label{Platooning_algorithm}
+%aj only write about what you have done. rest move to future work
+
 Multiple methods of algorithm has been explored, "Mimic", "Time delay", "Nav2 API" and "AprilTags/ArUco". First two where completed and tested in real world. "Nav2 API" started on and not finished and "AprilTags/ArUco" where just researched. 
 
+%aj algorithm required or flowchart here. The implementation explained can be moved to appendix 
 \paragraph{Mimic} is the simplest form of platooning algorithm.  Where the Husky and TB3 receives the same \topic{cmd\_vel} from either teleop or Nav2 running on the husky.  This algorithm where set up and tested proving it works for a straight line. Mimic dose not work for non straight paths since the TB3 will turn at the same time as the Husky and therefor loose the path.
-   
+
+%%aj algorithm required or flowchart here. The implementation explained can be moved to appendix. rename platooning
+% aj you are mixing method with implementation. What you describe here is implementation. need to discuss how this can be rewritten.
 \paragraph{Time delay} is the same as mimic but with a time delay. The TB3 is launch with a namespace "tb". Husky receives \topic{cmd\_vel} form teleop or Nav2. A node called "cmd\_vel\_subpub\_v1.py" subscribes to \topic{cmd\_vel} and saves the data in a "delay array". The node publishes the data from the "delay array" under the \topic{/tb/cmd\_vel} topic". It is set up in the order so \topic{/tb/cmd\_vel} is one "delay array" behind \topic{cmd\_vel}. The TB3 stat one meter behind the Husky, therefor the "delay array" is initialised with a starting velocity so the TB3 and Husky has the same start position. Se flow chart \ref{fig:TimeDelayFlow} for visual explanation.
 
 \begin{figure}[H]
@@ -183,9 +222,10 @@ Multiple methods of algorithm has been explored, "Mimic", "Time delay", "Nav2 AP
     \caption{Flow chart Time delay algorithm}
     \label{fig:TimeDelayFlow}
 \end{figure}
-
+%increase font size for better readiblity. explain this flow chart comprehensively
 This algorithm where set up and tested and proved to be imprecise. Even though the two vehicles get the same velocity command errors accumulate over time causing the follower to drift of the path. 
 
+%aj move to future work
 \paragraph{Nav2 API} was initiated but remained unfinished due to time constraints. This method is based on the Nav2 API and the fact that the TB3 and the Husky have been setup with the ability to drive autonomously independently. For better understanding here is a list of some Nav2 API commands.
 
 \begin{table}[H]
@@ -205,6 +245,7 @@ This algorithm where set up and tested and proved to be imprecise. Even though t
 
 The idea was both husky and TurtleBot3 run Nav2, a node receives "getFeedback()" from Husky and sends "goToPose()" x distance behind the Husky to the TB3. This task was started on but not finished here is a list with status of the milestones \ref{tab:MilestonesNav2API}.
 
+%move to future work
 \begin{table}[H]
     \centering
     \begin{tabular}{c|c}
