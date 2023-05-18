@@ -1,16 +1,22 @@
-\chapter{Results on ...}
+\chapter{Results and discussion}
 
 % ref method flow chart and chapter and algorithm 
 
 % image of the videos 
 The results of this thesis is documented in this Youtube playlist \cite{youtube_playlist_results}. The playlist consist of five videos. 
 \begin{enumerate}
-    \item "TB w Nav2" is showing TB3 driving autonomous using ROS2 galacitc, Nav2, SLAM Toolbox. 
-    \item "Nav2SLAM 2etg" is showing Husky driving autonomous using ROS2 foxy and galacitc, Nav2, SLAM Toolbox. 
-    \item "TimeDelayTest" is video where the Husky is driven by teleop and the TB3 follows using the Time Delay algorithm. 
-    \item Mimic is a video showing the the TB3 mimic the Husky controlled by teleop. 
-    \item "HuskyNav2 TBsubpub" is showing Husky driving autonomous using ROS2 foxy and galacitc, Nav2, SLAM Toolbox while the TB3 is following using the Time Delay algorithm. 
+    \item "TB w Nav2" is showing TB3 driving autonomous using ROS2 galacitc, Nav2, SLAM Toolbox. An external computer is used to set initial position and goals form Rviz. Nav2 works well with TB3, but the system could benefit from a 3D LiDAR so it could sense obstacles below the LiDAR. 
+    
+
+    \item "Nav2SLAM 2etg" \label{Nav2SLAM 2etg} is showing Husky driving autonomous using ROS2 foxy and galacitc, Nav2, SLAM Toolbox. An external computer is used to set initial position and goals form Rviz. 
+    At \href{https://youtu.be/JiTbKtXq_GY?t=65}{1:05} the husky struggles with navigating this could be caused by the range of the LiDAR, skidding wheels, the camera man walking behind the Husky or a combination. Problems like this has been thought the hole project 
+
+    \item "Mimic" \ref{Mimic} is a video showing the the TB3 mimic the Husky controlled by teleop. 
+    
+    \item "TimeDelayTest" is video where the Husky is driven by teleop and the TB3 follows using the Time Delay algorithm \ref{Time delay}. 
+    
+    \item "HuskyNav2 TBsubpub" is showing Husky driving autonomous using ROS2 foxy and galacitc, Nav2, SLAM Toolbox while the TB3 is following using the Time Delay algorithm \ref{Time delay}. 
 \end{enumerate}
-The two robots is also able to drive on a pre made map with Nav2 localization. 
+The two robots is also able to drive on a pre made map with Nav2 localization. This was not recorded and edited do to time limitations. 
 
 
