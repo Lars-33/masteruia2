@@ -1,4 +1,6 @@
-\chapter{Methods in ...} %aj material and method
+\chapter{Method} %aj material and method
+
+This chapter explains the development tools utilized in the experiment and the simulation setup.
 
 %aj 3.1 experiment setup
 %3.2 methodology
@@ -8,8 +10,178 @@
 %3.2.4 platooning
 
 %aj first para(s) should be without section where you explain what is in the chapter. write about the  algorithm (a) imitation/mimic and (b) paltooning
-\section{Introduction of method}
-In this chapter the setup of Husky and TB3 both hardware and software will be explained. Then how both where setup to drive autonomous independently. Lastly the platooning algorithms will be explained. 
+
+\section{Development tools}
+% every  chapter has intro and conclution 
+%aj a paragraph explaining what is mentioned in the chapter. write about the building blocks of yuour thesis. please see the teams where i have outlined them. then each section becomes the theory or working principle of the individual components.
+This section's purpose is to give a insight into the tools used in this thesis as well as there working principal. The information here is a collection whats needed to understand the experimental setup. For further reading all of the topics here are well documented on the web. 
+ 
+%background /theory should be about - autonomous navigation, slam, collision avoidance, networked communication ... see teams
+
+\subsection{Hardware}
+
+The hardware used in this thesis is presented in Table \ref{tab:HW_list}.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|c|c}
+        Name                    & Reference name    & Short description  \\ \hline
+        Clearpant Husky         & Husky             & Medium sized wheeled robot \\
+        Nvidia Xavier 1         & Xavier1           & Compact computer controlling the Husky\\
+        Ouster OS-1-64          & OS1               & 3D LiDAR on the Husky \\
+        UM7 Orientation Sensor  & UM7               & Inertial measurement unit(IMU)  \\
+        Husky's wheel encoder   & Wheel encoder     & Measures the movement of the wheels\\
+        TurtleBot3              & TB3               & Small sized wheeled robot   \\
+        Nvidia Xavier 2         & tb                & Compact computer Controlling TB3  \\
+        LDS-01                  & LDS-01            & 2D LiDAR on TB3 \\
+        OpenCR 1.0              & OpenCR 1.0        & Microcontroller with IMU for robotics \\
+        
+    \end{tabular}
+    \caption{List of hardware}
+    \label{tab:HW_list}
+\end{table}
+
+\subsubsection{Xavier}
+Xavier or NVIDIA Jetson AGX Xavier Developer Kit \cite{xavierguide} is an compact computer for AI applications. With the size 105mm x 105mm x 65mm and the power source being 9 - 20 volts its practical for mobile robots. 
+
+The Nividia computers come with their own Linux version called JetPack, based on Ubuntu. The JetPack system includes AI applications. JetPack and the GPU is the reason why the Xavier is suitable for AI applications. The CPU of the Xavier has an ARM architecture. A WiFi module can be attached and is in this project.
+
+\subsubsection{Sensors}
+
+\paragraph{LiDAR}(Laser imaging, Detection, and Ranging) is a method of measuring distances with laser. The principle is sending a laser beam at a target, sensing the reflection and calculating the distance based on time between laser sent and received. 
+
+TurtleBot3 uses a LiDAR called LDS-01 and the Husky uses Ouster OS-1-64. Table \ref{tab:lidar_data} provides relevant data for the LiDAR's. 
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c|c|c}
+        Specifications          & TrutleBot3        & Husky             \\ 
+                                & LDS-01            & Ouster OS-1-64    \\ \hline
+        Range                   & 120 - 3,500mm     & 0.8m - 120m       \\ \hline
+        Vertical resolution     & 1 channel         & 64 channel        \\ \hline
+        Angular Range           & $360^\circ$       & $360^\circ$       \\ \hline  
+        Power source            & Micro USB         & Barrel jack       \\  
+                                & 5 volts           & 24 volts          \\ \hline
+        Data line               & Micro USB         & Ethernet          \\       
+    \end{tabular}
+    \caption{LiDAR data for LDS-01\cite{lds01} and OS1 \cite{OS1Datasheet}}
+    \label{tab:lidar_data}
+\end{table}
+
+\paragraph{Inertial Measurement Unit (IMU)} is an electronic device that uses accelerometers, gyroscopes, and sometimes magnetometers to measure and report a body's specific force, angular rate, and occasionally its orientation.
+
+\paragraph{Rotary encoders} are electro-mechanical devices that convert the angular position or rotation of a shaft into an electrical signal. They are commonly used in robotics, automation, and other control systems to measure the position and speed of rotating objects, such as wheels, motors, and joints. Rotary encoders typically consist of a rotating disk or shaft with evenly spaced markers or slots, and a stationary sensor or detector that reads the changes in the markers or slots as the shaft rotates. There are two main types of rotary encoders: incremental and absolute. Incremental encoders provide relative position and speed information, while absolute encoders provide absolute position information. Rotary encoders can be connected to a microcontroller or other processing unit to read and interpret the electrical signal, and use it to control the movement and position of a robot or other device.
+
+\subsubsection{Husky}
+The Husky UGV \cite{huskyugv} is an medium sized UGV(unmanned ground vehicle) from Clearpath. It have fire wheels and a footprint of 990mm x 670mm. It is powered by two 24volts battery's in series, total 48 volts. There is three power outputs for external components 5V, 12V and 24V fused at 5A each. The wheels are controlled by a built-in motor drive with wheel encoder.
+
+The front and back wheel of each side is mechanical connected, and power by one motor. Therefor in able to turn the Husky's wheels will slide, this makes the turning and odometry prediction form the wheel encoders inaccurate. This makes the odometry more dependent on the IMU and should be in mind when tuning the ekf filter or similar data fusing methods.
+
+The size and skid turning wheels of the Husky combined with the range of the LiDAR can be an issue when driving autonomous with Nav2 inside, see the Discussions for more. 
+
+When Nav2 is uncertain of the robot's position a recovery process is started. The default recovery process make the robot rotate, skid turning makes this presses less accurate.
+
+It is clumsy with the sliding turning and blind zone under 80cm. 
+
+\subsubsection{TurtleBot3}
+The TurtleBot3(Waffle Pi) is small robot provided by Open Robotics and ROBOTIS \cite{turtlebot3}. The footprint of the robot is 138mm x 178mm, its driven by two front wheels and have two ball casters in the back. Therefor the TurtleBot3 has differential drive, witch is a precise way to turn. 
+
+\paragraph{OpenCR1.0} is a multi purpose board on the TurtleBot3\cite{opencr10}. This board connects the battery, and powers the Xavier and motors for the wheels. The control signal for the wheels comes from the Xavier through the OpenCR1.0 int the wheels. 
+A LiDAR is included as well as an IMU on OpenCR1.0 board.
+
+
+\subsection{Software}
+
+\subsubsection{Ubuntu}
+
+Ubuntu is an open source operating system(OS) based on Linux\cite{ubuntu}\cite{osi}. It the most popular Linux distribution and the main OS for ROS2. ROS2 can be used on Windows and Mac as well but is sub optimal. Ubuntu have two main forms desktop and server. Desktop provides a graphical user interface(GUI). Ubuntu server dose not have a GUI, it is just a text-based user interfaces(TUI). The server is more demands less possessing power and storage. 
+
+
+\paragraph{SSH} or Secure Shell is a network protocol for communication between two computers witch is encrypted. The two computers have to be on the same network. SSH is a terminal based program, therefor there is no GUI just a TUI. 
+
+In robotics SSH is commonly used. Often its not practical or possible to connect the robots computer to keyboard and a monitor. A lot of robots have computers running a TUI based OS, so a monitor wound not provide more information than SSH. 
+
+\subsubsection{ROS2} 
+ROS2 (Robot operating system 2) \cite{rosfoxydocs} is a meta OS installed on top of an other OS. The OS most commonly used is Ubuntu. ROS2 can be described as a base for building robot applications with a set of software libraries and tools. ROS2 is open source and has a large community, this is essential. The large community means that a its a lot of help online. Open source makes is easier to make ROS2 software to different hardware. 
+
+A large part of ROS2 is communication with the messages. Messages refers to data this can be single variables like "int", "float", "string" and so on. Bigger data types like "Twist.msg" and "Odometry.msg" is also messages, this often contain hierarchy of data. 
+Table \ref{tab:ROS2_topics} shows list of common ROS/ROS2 topics.
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|c}
+       Topic name       & Function          \\ \hline
+        /cmd\_vel       & Velocity command  \\
+        /odom           & Odometer          \\
+        /scan           & 2D laser scan     \\
+        /points         & 3D laser scan     \\        
+        /imu/data       & IMU data          \\
+    \end{tabular}
+    \caption{Caption}
+    \label{tab:ROS2_topics}
+\end{table}
+
+The standard topic names are convenient but can cause problems when there is multiple types of the same sensor. Namespace solves this problem by putting "/namespace" in front of \topic{/generic\_topic\_name}.  
+
+\paragraph{Nodes} in ROS2 is a lightweight and modular process that performs a specific computation. Each node is identified by a unique name within the ROS2 system. 
+ROS2 nodes can be described by what they are commonly used for. 
+
+\begin{itemize}
+    \item Publish sensor data: A ROS node can read data from sensors, such as cameras or lidars, and publish it to a ROS topic for other nodes to consume like \topic{/scan} and \topic{/points}.
+    
+    \item Control a robot: A ROS node can send commands to a robot's motors or actuators to control its movement or behavior based on topics like \topic{/cmd\_vel}.
+    
+    \item Process data: A ROS node can receive data from other nodes and perform calculations or transformations on it, such as filtering or mapping for example a EKF filter node.
+    
+    \item Provide a user interface: A ROS node can provide a graphical user interface (GUI) or command-line interface (CLI) for users to interact with the system like teleop or Rviz.
+    
+    \item Manage communication: A ROS node can act as a bridge between different communication protocols or systems, allowing them to exchange data using ROS messages.
+    
+\end{itemize}
+
+Nodes communicate with each other by publishing messages to topics or subscribing to topics to receive messages. Nodes can also communicate with each other using services, which provide a request/response communication pattern. ROS2 nodes can also communicate with each other using actions, which provide a more complex form of request/response communication pattern that involves feedback and cancellation. Nodes can be started up directly for the terminal or a launch file. 
+
+\paragraph{Launch files} is needed in bigger ROS2 project where there is often a lot of different hardware that needs to be stated or launched to start a complete robot. Python or xml launch files is a script for launching multiple nodes and send arguments into them. Launch files can also launch other launch files, convenient because this is often provided with complete robots. 
+
+\paragraph{ROS arguments} can be passed into nodes and launch files, and alter the way they work. What type of arguments is available depends on the function of the node or launch file. Arguments can be passed directly into nodes in the terminal like this : 
+\begin{lstlisting}[language=bash]
+  ros2 run demo_nodes_cpp talker --ros-args -r __ns:=/namespace
+\end{lstlisting}
+Nodes can also resive arguments in a launch file like this: 
+\lstinputlisting[language=Python]{code/talker_launch.py}
+
+For launch files argument function the same way just a bit different syntax. To check if arguments can be bassed into a launch file write --show-args at the end of the launch command, for example: 
+\begin{lstlisting}[language=bash]
+  ros2 launch turtlebot3_bringup robot.launch.py --show-args
+\end{lstlisting}
+
+\paragraph{Parameter files} is a .yaml file with multiple arguments or configurations. Often parameter files can be passed in as an argument.
+
+\paragraph{ROS2 packages} is a standard way to structure ROS2 code, making it essay integrate custom code into ROS2 and share it. A typical ROS2 package contains nodes, launch files and parameter files. 
+
+\paragraph{rqt} is a visualisation tool for ROS2. It provides a map of nodes and topics on the local network. This is a great tool for debugging. 
+
+\paragraph{Gazebo} is a physics-based simulator for testing and developing robotics algorithms. It uses models to represent robots and objects in the simulated environment. Gazebo supports a plugin system for extending its functionality. It provides a GUI for visualizing and interacting with the simulation, witch also works great with Rviz.
+
+\paragraph{Rviz} is a 3D visualization tool for ROS that allows users to view and interact with robot data in real-time. It can display data such as point clouds, laser scans, and 3D models of robots and their environments. Rviz allows users to change the perspective of the visualization and interact with the data using mouse and keyboard commands. It can also be used to configure sensors and other components of a robot system by visualizing their data and properties. In summary, Rviz is a powerful 3D visualization tool for ROS that allows users to interact with robot data in real-time and visualize sensor data and properties.
+
+\paragraph{teleop_twist_keyboard} or just teleop is a build in tool in ROS2 for controlling robots from the keyboard. It dose this by publishing velocity control from keyboard input on the "/cmd\_vel" topic.   
+
+\subsubsection{Navigation} 
+
+
+\paragraph{Nav2} (Navigation Stack 2) \cite{rosnavigation} is a high-level open-source software framework for autonomous robot navigation in ROS2. It provides a set of reusable and configurable software components for creating complex navigation behaviors for mobile robots, including path planning, localization, obstacle avoidance, and control. Nav2 is built on top of the ROS2 middleware and leverages other ROS2 packages for communication and hardware abstraction. It also provides interfaces for integrating with other navigation systems and tools, such as Gazebo and RViz. Nav2 is designed to be modular and extensible, allowing developers to customize and add new navigation behaviors to meet the specific requirements of their robots and environments.
+Nav2 includes a API(application programming interface)\cite{rosnavAPI}, a set of commands for interacting with Nav2 from Python. Examples of commands can be send a goal, receive position and check if a task (rout) is complete.  
+
+For autonomous ground vehicles in this project Nav2 is used in combination with LiDAR, wheel encoders, IMUs and the estimated odometry. 
+
+\paragraph{Odometry} is the use of data from sensors on a mobile robot to estimate its motion, specifically its position and orientation changes over time. Wheel encoders and Inertial Measurement Units (IMUs) are two commonly used as sensors. Estimates from wheel encoders struggles with various sources of error, such as slippage, uneven terrain and imperfect sensors. These errors can accumulate over time and result in significant deviations from the actual position and orientation of the robot[]. Although IMUs are useful for providing real-time data on a robot's motion, they are also subject to various sources of error that can affect their accuracy, such as bias, noise, drift, and temperature changes. 
+To solve the problems with wheel encoders and IMUs, a common approach is to use sensor fusion techniques, which combine data from multiple sensors to obtain a more accurate estimate of the robot's position and orientation. One common method for sensor fusion is the Extended Kalman Filter (EKF). 
+
+\paragraph{EKF} (Extended Kalman Filter) is a type of recursive Bayesian filter commonly used in robotics and control systems for estimating the state of a system with noisy sensor measurements. The EKF is an extension of the Kalman Filter that is designed to handle nonlinear systems by using a linear approximation of the system's dynamics and measurement functions around the current state estimate. The EKF estimates the system state by recursively updating a predicted state estimate using a model of the system's dynamics and the measurements received from sensors. The EKF also estimates the uncertainty of the state estimate using a covariance matrix, which is updated at each time step based on the predicted and measured uncertainties. The EKF is widely used in robotics applications, such as localization and mapping, where it can estimate the position and orientation of a robot based on noisy sensor data, such as GPS, IMU, or visual odometry.
+
+
+\section{Experiment setup}
+In this section the setup of Husky and TB3 both hardware and software will be explained. Then how both where setup to drive autonomous independently. Lastly the platooning algorithms will be explained. 
 
 %aj remove. good for handover
 Before getting into the setup of Husky and TB3 it is necessary to explain the the custom packages made for this project $masteruia$ \cite{masteruia} and $uia\_husky\_0776$ \cite{uiahusky}. 
@@ -21,8 +193,8 @@ First off the folder called $uia\_husky\_0776$ is a copy of the one talked about
 The $tb3\_cpp$ is standard ROS2 CMake package consisting a launch file for TB3, nodes for Nav2 API and platooning algorithm. 
                       
 %aj suggest to follow the above structure. the content aslo has to be rewritten. mention about UGV, sensors - lidar, IMU, computing platform - xavier 1 .
-\section{Husky}
-\subsection{Hardware}
+\subsection{Husky}
+\subsubsection{Hardware}
 This section will describe the setup of the Husky and its components. 
 
 The IMU was glued to the center of the tray, connected with a USB to the Xavier. 
@@ -44,13 +216,9 @@ The router is mounted in the front of the aluminum frame powered by 12 volt barr
   \end{minipage}
 \end{figure}
 %aj font size needs to be increased, its not redable
-\subsection{Software}
-This section will describe thee setup of the Husky without Nav2, the 
-%aj the section describes (not will describe)
-"base" setup of the Husky. For less comfusion all \topic{topics} and \node{nodes} have colors and there ROS2 name. 
-The Xavier1 on the Husky is runnning Ubuntu 20.04 Desktop
-%since you use only one xavier call it xavier
-\cite{ubuntu20_04} with ROS2 foxy \cite{rosfoxyinstall} and galactic \cite{rosgalacticinstall}, Nav2 binary \cite{rosnavinstall}, Husky foxy Debian packages \cite{huskyinstall} and $uia\_husky\_0776$ \cite{uiahusky}. When setting up the ROS2 software Rviz and rqt was used to test all components. \newline
+\subsubsection{Software}
+This section describes thee setup of the Husky without Nav2, the "base" setup of the Husky. For less comfusion all \topic{topics} and \node{nodes} have colors and there ROS2 name. 
+The Xavier1 on the Husky is runnning Ubuntu 20.04 Desktop \cite{ubuntu20_04} with ROS2 foxy \cite{rosfoxyinstall} and galactic \cite{rosgalacticinstall}, Nav2 binary \cite{rosnavinstall}, Husky foxy Debian packages \cite{huskyinstall} and $uia\_husky\_0776$ \cite{uiahusky}. When setting up the ROS2 software Rviz and rqt was used to test all components. \newline
     
 $uia\_husky\_0776$ launches packages for Husky, OS1, UM7 and $pointcloud\_to\_laserscan$. A launch file was made to launch it all at once "husky.launch.py" in "uia\_husky\_0776/husky\_group/launch/".
 
@@ -96,8 +264,8 @@ ovals are \node{nodes} and squares is \topic{topics}. This dose not include Nav2
 % images neeed to be refrenced 
 
 %aj use simple present. also write what you have done. All the failed attempt goes to discussion
-\section{TurtleBot3}
-\subsection{Hardware}
+\subsection{TurtleBot3}
+\subsubsection{Hardware}
 The TurtleBot3 started with no battery and was driven by a Raspberry Pi. The Pi was running Ubuntu Server and had an old student project saved. It had performance issues, writing in the TUI was choppy. The Pi was flashed with Ubuntu Server 20.04 in an attempt to increase the performance. This did not work, and therefor it was decided tho switch out the Pi. A Xavier was available, it is same as the Husky is using and was therefor chosen. The TurtleBot3 uses a battery similar to RC Cars, RC battery's was ordered though a local hobby store. Figure \ref{fig:TB3HW} shows the map of the TB3 hardware. 
 
 \begin{figure}[H]
@@ -117,7 +285,7 @@ The TurtleBot3 started with no battery and was driven by a Raspberry Pi. The Pi 
 
 
 %aj need to discuss to understand better. I guess fig 3.6 and 3.7 should be demonstrated first and explain them.
-\subsection{Software}
+\subsubsection{Software}
 
 This will describe the setup of the TB3 without Nav2, the "base" setup TB3.  
 The name of user on the TB3 Xavier is tb and will be the reference. tb is running Ubuntu 20.04 Desktop \cite{ubuntu20_04} with ROS2 galactic Debian(binary) \cite{rosgalacticinstall}, TB3 packages binary \cite{turtlebot3galactic}, Nav2 binary \cite{rosnavinstall} and $masteruia$ \cite{masteruia}. For practical reasons a custom launch file was made for the TB3 in the $masteruia$ package. 
@@ -154,7 +322,7 @@ The "params" folder is full of work leftovers except for "tb3\_param.yaml" witch
 Last folder "src" contains nodes from this project. "cmd\_vel\_subpub\_v1.py is the algorithm Time Delay \ref{Platooning_algorithm}. "feedback.py", "nav2.py", "pose\_pub\_v*.py" and "pose\_sub\_v*.py" is nodes used when attempting to use Nav2 API for a platooning algorithm \ref{Platooning_algorithm}.
 
 %aj algorithm required or flowchart here. The implementation explained can be moved to appendix 
-\section{Autonomous driving on Husky and TB3 independently}
+\subsection{Autonomous driving on Husky and TB3 independently}
 Both robots where set up to drive autonomous and is able to do so independently. In the beginning it was thought this was necessary to archive autonomous platooning. There where two ways the robots could drive autonomous with and without a pre made map. 
 
 Driving with simultaneous localization and mapping (SLAM) , and navigation or without a pre made map. First the base of the robot is launched, then SLAM lastly navigation. There are multiple ways of launching SLAM: 
@@ -204,17 +372,17 @@ Terminal 3, note custom parameter file.
 Navigating with a pre made map uses the same setup for the robots, but SLAM is not launched and the localization\_launch.py is used inserted of navigation\_launch.py. The map is passed into localization\_launch.py as a argument. Map can be made using SLAM with navigation or telop. 
 
 % basically you are doing (a) mimic and (b) platooning. so keep section name -algorithm and sub section / paragraph as mimic and platooning
-\section{Platooning algorithm} \label{Platooning_algorithm}
+\subsection{Platooning algorithm} \label{Platooning_algorithm}
 %aj only write about what you have done. rest move to future work
 
-Multiple methods of algorithm has been explored, "Mimic", "Time delay", "Nav2 API" and "AprilTags/ArUco". First two where completed and tested in real world. "Nav2 API" started on and not finished and "AprilTags/ArUco" where just researched. 
+Multiple methods of algorithm has been explored, "Mimic", "Time delay", "Nav2 API" and "AprilTags/ArUco". First two where completed and tested in real world. "Nav2 API" started on and not finished and "AprilTags/ArUco" where just researched, these are discussed in Further work \ref{Further work}. 
 
 %aj algorithm required or flowchart here. The implementation explained can be moved to appendix 
-\paragraph{Mimic} is the simplest form of platooning algorithm.  Where the Husky and TB3 receives the same \topic{cmd\_vel} from either teleop or Nav2 running on the husky.  This algorithm where set up and tested proving it works for a straight line. Mimic dose not work for non straight paths since the TB3 will turn at the same time as the Husky and therefor loose the path.
+\paragraph{Mimic} \label{Mimic} is the simplest form of platooning algorithm.  Where the Husky and TB3 receives the same \topic{cmd\_vel} from either teleop or Nav2 running on the husky.  This algorithm where set up and tested proving it works for a straight line. Mimic dose not work for non straight paths since the TB3 will turn at the same time as the Husky and therefor loose the path.
 
 %%aj algorithm required or flowchart here. The implementation explained can be moved to appendix. rename platooning
 % aj you are mixing method with implementation. What you describe here is implementation. need to discuss how this can be rewritten.
-\paragraph{Time delay} is the same as mimic but with a time delay. The TB3 is launch with a namespace "tb". Husky receives \topic{cmd\_vel} form teleop or Nav2. A node called "cmd\_vel\_subpub\_v1.py" subscribes to \topic{cmd\_vel} and saves the data in a "delay array". The node publishes the data from the "delay array" under the \topic{/tb/cmd\_vel} topic". It is set up in the order so \topic{/tb/cmd\_vel} is one "delay array" behind \topic{cmd\_vel}. The TB3 stat one meter behind the Husky, therefor the "delay array" is initialised with a starting velocity so the TB3 and Husky has the same start position. Se flow chart \ref{fig:TimeDelayFlow} for visual explanation.
+\paragraph{Time delay} \label{Time delay} is the same as mimic but with a time delay. The TB3 is launch with a namespace "tb". Husky receives \topic{cmd\_vel} form teleop or Nav2. A node called "cmd\_vel\_subpub\_v1.py" subscribes to \topic{cmd\_vel} and saves the data in a "delay array". The node publishes the data from the "delay array" under the \topic{/tb/cmd\_vel} topic". It is set up in the order so \topic{/tb/cmd\_vel} is one "delay array" behind \topic{cmd\_vel}. The TB3 stat one meter behind the Husky, therefor the "delay array" is initialised with a starting velocity so the TB3 and Husky has the same start position. Se flow chart \ref{fig:TimeDelayFlow} for visual explanation.
 
 \begin{figure}[H]
     \centering
@@ -226,42 +394,5 @@ Multiple methods of algorithm has been explored, "Mimic", "Time delay", "Nav2 AP
 This algorithm where set up and tested and proved to be imprecise. Even though the two vehicles get the same velocity command errors accumulate over time causing the follower to drift of the path. 
 
 %aj move to future work
-\paragraph{Nav2 API} was initiated but remained unfinished due to time constraints. This method is based on the Nav2 API and the fact that the TB3 and the Husky have been setup with the ability to drive autonomously independently. For better understanding here is a list of some Nav2 API commands.
 
-\begin{table}[H]
-    \centering
-    \begin{tabular}{c|c}
-        Command             & Description \\ \hline
-        setInitialPose()    & Setting initial pose of a robot \\
-        goToPose()          & Publishes a Nav2 Goal \\
-        goThroughPoses()    & Publishes a list of Nav2 Goals \\
-        getPath()           & Receives the complete ongoing path \\
-        changeMap()         & Changes current map to chosen one \\
-        getFeedback() & Info about the robot running Nav2 like Time stamp, frame\_id and pose\\
-    \end{tabular}
-    \caption{Some Nav2 API commands\cite{rosnavAPI}}
-    \label{tab:Nav2API}
-\end{table}
-
-The idea was both husky and TurtleBot3 run Nav2, a node receives "getFeedback()" from Husky and sends "goToPose()" x distance behind the Husky to the TB3. This task was started on but not finished here is a list with status of the milestones \ref{tab:MilestonesNav2API}.
-
-%move to future work
-\begin{table}[H]
-    \centering
-    \begin{tabular}{c|c}
-        Task                                                        & Status   \\ \hline
-        Husky driving autonomously with Nav2                        & Complete \\
-        TB3 driving autonomously with Nav2                          & Complete \\
-        Control Nav2 with API from python                           & Complete \\
-        Husky with namespace                                        & Not complete \\
-        TB3 with namespace                                          & Complete \\
-        Running Nav2 on Husky with namespace                        & Not complete \\
-        Running Nav2 on TB3 with namespace                          & Not complete \\
-        Running Husky and TB3 on same network with independent Nav2 & Not complete\\
-        Node receiving position from Husky and sending goal to TB3  & Not complete \\
-    \end{tabular}
-    \caption{Milestones of Nav2 API}
-    \label{tab:MilestonesNav2API}
-\end{table}
-   
 
