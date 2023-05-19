@@ -307,7 +307,7 @@ The "robot.launch.py" from the TB3 packages is the file used for launch the TB3 
     \label{fig:TB3nsSW}
 \end{figure}
 
-To achieve namespace like in Figure \ref{fig:TB3nsSW} $tb3\_cpp$ package was made in the $masteruia$ GitHub \cite{masteruia}. This contains three folders launch, params and src. In launch the "tb3\_launch.py" is the only one used the rest is leftovers from working. "tb3\_launch.py" is  a launch file based on using the "robot.launch.py" from "turtlebot3\_bringup" \cite{turtlebot3galactic} to launch the TB3. Here is how it works in order: 
+\label{method::tb3_cpp_pkg_explained}To achieve namespace like in Figure \ref{fig:TB3nsSW} $tb3\_cpp$ package was made in the $masteruia$ GitHub \cite{masteruia}. This contains three folders launch, params and src. In launch the "tb3\_launch.py" is the only one used the rest is leftovers from working. "tb3\_launch.py" is  a launch file based on using the "robot.launch.py" from "turtlebot3\_bringup" \cite{turtlebot3galactic} to launch the TB3. Here is how it works in order: 
 \begin{enumerate}
 \item Exporting "TURTLEBOT3\_MODEL" is required by "robot.launch.py" 
 \item Opens access to LiDAR and OpenCR1.0 
@@ -389,11 +389,22 @@ Mimic is setup with launching the Husky and the TB3 without namespace. If launch
 
 %%aj algorithm required or flowchart here. The implementation explained can be moved to appendix. rename platooning
 % aj you are mixing method with implementation. What you describe here is implementation. need to discuss how this can be rewritten.
-\paragraph{Time delay} \label{Time delay} is method of platooning. 
+\paragraph{Time delay} \label{Time delay} is method of platooning. It is based on a node called subpub witch subscribes to the \topic{/cmd\_vel} saves it in an array. The array has a length of 9 and can be adjusted. The publisher will publish the value one in front of the last saved value, so the publisher is one array behind the subscriber creating the time delay. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.5\textwidth]{Figures/drawio/Time_delay_pricipal.drawio.png}
+    \caption{Principal behind the Time delay algorithm}
+    \label{fig:TimeDelayPrincipal}
+\end{figure}
 
 
 
-The TB3 is launch with a namespace "tb". Husky receives \topic{cmd\_vel} form teleop or Nav2. A node called "cmd\_vel\_subpub\_v1.py" subscribes to \topic{cmd\_vel} and saves the data in a "delay array". The node publishes the data from the "delay array" under the \topic{/tb/cmd\_vel} topic". It is set up in the order so \topic{/tb/cmd\_vel} is one "delay array" behind \topic{cmd\_vel}. The TB3 stat one meter behind the Husky, therefor the "delay array" is initialised with a starting velocity so the TB3 and Husky has the same start position. Se flow chart \ref{fig:TimeDelayFlow} for visual explanation.
+The TB3 is launch with a namespace "tb". Husky receives \topic{cmd\_vel} form teleop or Nav2. 
+
+A node called "cmd\_vel\_subpub\_v1.py" subscribes to \topic{cmd\_vel} and saves the data in a "delay array". The node publishes the data from the "delay array" under the \topic{/tb/cmd\_vel} topic". It is set up in the order so \topic{/tb/cmd\_vel} is one "delay array" behind \topic{cmd\_vel}. The TB3 stat one meter behind the Husky, therefor the "delay array" is initialised with a starting velocity so the TB3 and Husky has the same start position. Se flow chart \ref{fig:TimeDelayFlow} for visual explanation.
+
+The node subpub is launched with a file called "cmd\_vel\_subpub\_v1.py" from the "tb\_cpp" package\ref{method::tb3_cpp_pkg_explained}. Has three main components a subscriber, publisher and array. 
 
 \begin{figure}[H]
     \centering
@@ -402,4 +413,5 @@ The TB3 is launch with a namespace "tb". Husky receives \topic{cmd\_vel} form te
     \label{fig:TimeDelayFlow}
 \end{figure}
 %increase font size for better readiblity. explain this flow chart comprehensively
-This algorithm where set up and tested and proved to be imprecise. Even though the two vehicles get the same velocity command errors accumulate over time causing the follower to drift of the path. 
+
+Time Delay is setup with launching the Husky and the TB3 with the namespace /tb. Then then teleop on a external computer is launched or Nav2 on the Husky is launched \ref{Autonomous driving on Husky and TB3 independently}. Since the TB3 starts behind the Husky this needs to be compensated for. Therefor the Delay Array has initial velocity witch make the TB3 move one meter forward. As a result the center of the TB3 needs to be placed one meter behind the Husky's center. When the robots are lined up the start the node subpub. Because of the initial velocity of the TB3 the Husky needs to be driven forward right after starting subpub or they will coiled. This algorithem where tested, filmed and discussed here \ref{HuskyNav2 TBsubpub}. 
