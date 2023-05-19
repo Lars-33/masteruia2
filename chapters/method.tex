@@ -378,13 +378,22 @@ Multiple methods of algorithm has been explored, "Mimic", "Time delay", "Nav2 AP
 %aj algorithm required or flowchart here. The implementation explained can be moved to appendix 
 \paragraph{Mimic} \label{Mimic} is a method where two robots copy each other despite different hardware. The Husky and TB3 receives the same \topic{cmd\_vel} from either teleop or Nav2 running on the husky. In the Husky and TB3 software this velocity command is converted to wheel movement.  
 
-
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.5\textwidth]{Figures/drawio/FlowChart_Mimic.drawio.png}
+    \caption{Flow chart Mimic algorithm}
+    \label{fig:FlowMimic}
+\end{figure}
 
 Mimic is setup with launching the Husky and the TB3 without namespace. If launched correctly they should both subscribe to the \topic{cmd\_vel}. The source for the \topic{cmd\_vel} can be teleop or Nav2, launching Nav2 is described here \ref{Autonomous driving on Husky and TB3 independently}. 
 
 %%aj algorithm required or flowchart here. The implementation explained can be moved to appendix. rename platooning
 % aj you are mixing method with implementation. What you describe here is implementation. need to discuss how this can be rewritten.
-\paragraph{Time delay} \label{Time delay} is the same as mimic but with a time delay. The TB3 is launch with a namespace "tb". Husky receives \topic{cmd\_vel} form teleop or Nav2. A node called "cmd\_vel\_subpub\_v1.py" subscribes to \topic{cmd\_vel} and saves the data in a "delay array". The node publishes the data from the "delay array" under the \topic{/tb/cmd\_vel} topic". It is set up in the order so \topic{/tb/cmd\_vel} is one "delay array" behind \topic{cmd\_vel}. The TB3 stat one meter behind the Husky, therefor the "delay array" is initialised with a starting velocity so the TB3 and Husky has the same start position. Se flow chart \ref{fig:TimeDelayFlow} for visual explanation.
+\paragraph{Time delay} \label{Time delay} is method of platooning. 
+
+
+
+The TB3 is launch with a namespace "tb". Husky receives \topic{cmd\_vel} form teleop or Nav2. A node called "cmd\_vel\_subpub\_v1.py" subscribes to \topic{cmd\_vel} and saves the data in a "delay array". The node publishes the data from the "delay array" under the \topic{/tb/cmd\_vel} topic". It is set up in the order so \topic{/tb/cmd\_vel} is one "delay array" behind \topic{cmd\_vel}. The TB3 stat one meter behind the Husky, therefor the "delay array" is initialised with a starting velocity so the TB3 and Husky has the same start position. Se flow chart \ref{fig:TimeDelayFlow} for visual explanation.
 
 \begin{figure}[H]
     \centering
