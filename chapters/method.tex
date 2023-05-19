@@ -404,7 +404,13 @@ The TB3 is launch with a namespace "tb". Husky receives \topic{cmd\_vel} form te
 
 A node called "cmd\_vel\_subpub\_v1.py" subscribes to \topic{cmd\_vel} and saves the data in a "delay array". The node publishes the data from the "delay array" under the \topic{/tb/cmd\_vel} topic". It is set up in the order so \topic{/tb/cmd\_vel} is one "delay array" behind \topic{cmd\_vel}. The TB3 stat one meter behind the Husky, therefor the "delay array" is initialised with a starting velocity so the TB3 and Husky has the same start position. Se flow chart \ref{fig:TimeDelayFlow} for visual explanation.
 
-The node subpub is launched with a file called "cmd\_vel\_subpub\_v1.py" from the "tb\_cpp" package\ref{method::tb3_cpp_pkg_explained}. Has three main components a subscriber, publisher and array. 
+The node subpub is launched with a file called "cmd\_vel\_subpub\_v1.py" from the "tb\_cpp" package\ref{method::tb3_cpp_pkg_explained}. Has three main components a subscriber, publisher and array. When "cmd\_vel\_subpub\_v1.py" is started it sets initial self.i, self.delay 
+ 
+        self.i = 0
+        self.delay = 9
+        self.submsg = Twist() 
+        self.array_linear_x = [0.25] * self.delay 
+        self.array_angular_z = [0.0] * self.delay 
 
 \begin{figure}[H]
     \centering
