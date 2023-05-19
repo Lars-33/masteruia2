@@ -1,16 +1,36 @@
 \chapter{Conclusions}
 
+\begin{enumerate}
+    \item RQ: Is the TB3 and Husky suited for autonomous driving? 
+    
+    Both robots are capable of it. The TB3 is limited to even surfaces due to the wheel size and the ball casters. This wheel setup makes the TB3 omnidirectional making it pressies for autonomous driving. 
+    The Husky's size make it great for indoor and outdoor use, even though it is capable of autonomous driving the skid turning can be a problem \ref{Nav2SLAM 2etg}.
+
+    \item RQ: How can the TB3 and the Husky drive autonomously?
+
+    In this thesis this has been accomplished with Xavier connected to TB3/Husky running Ubuntu, ROS2 and Nav2.
+    
+    \item RQ: How can the TB3 follow the Husky? 
+
+    One method is the logging and replaying the velocity of the Husky, like in the Time Delay \ref{Time delay}. 
+    
+    \item RQ: How can autonomous platooning be achieved with the TB3 and the Husky? 
+    
+    Time Delay has been tested as autonomous platooning and the conclusion is it not well suited \ref{HuskyNav2 TBsubpub}. For a safe, stable and smart platooning the Nav2 API method should be used \ref{Further_work_Nav2_API}.
+\end{enumerate}
+
+
+
 \section{Further work} \label{Further work}
 
 \subsection{Hardware}
 \paragraph{The Xaviers} could be switched out with computers using x86 processor for limiting sources of error. 
 
-\paragraph{}
+\paragraph{The Husky} could be switched out with a robot better suited for indoor navigation, the skid turning being the main problem. Moving the LiDAR should also be tested for maximising relevant sensor information. 
 
 \subsection{Improving platooning algorithms}
-\paragraph{Time Delay} algorithm is working and can be improved with more information into the "subpub" node. The node can subscribe to odometry of Husky and TB3, and use this information to calculate the offset of where the TB3 is and where it should be. When Husky drives with Nav2 the topic \topic{/path} can be used for improving where the averness of where teh TB3 should be. Potentially LiDAR data can also be used, and the algorithm could be improved forever. Continuing improving on Time Delay feels like building a bad of Nav2. Therefor the author of this thesis believe using Nav2 API is the best way to achieve autonomous platooning with ROS2. 
 
-\paragraph{Nav2 API} was initiated but remained unfinished due to time constraints. This method is based on the Nav2 API and the fact that the TB3 and the Husky have been setup with the ability to drive autonomously independently. For better understanding here is a list of some Nav2 API commands.
+\paragraph{Nav2 API} \label{Further_work_Nav2_API} was initiated but remained unfinished due to time constraints. This method is based on the Nav2 API and the fact that the TB3 and the Husky have been setup with the ability to drive autonomously independently. For better understanding here is a list of some Nav2 API commands.
 
 \begin{table}[H]
     \centering
@@ -28,7 +48,7 @@
 \end{table}
 
 The idea was both husky and TurtleBot3 run Nav2, a node receives "getFeedback()" from Husky and sends "goToPose()" x distance behind the Husky to the TB3. This task was started on but not finished here is a list with status of the milestones \ref{tab:MilestonesNav2API}.
-%move to future work
+
 \begin{table}[H]
     \centering
     \begin{tabular}{c|c}
@@ -66,3 +86,4 @@ The main challenge is running two robots with Nav2 simultaneously on the same ne
     \label{fig:apriltag_principal}
   \end{minipage}
 \end{figure}
+

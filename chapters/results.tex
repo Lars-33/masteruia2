@@ -1,7 +1,5 @@
 \chapter{Results and discussion}
 
-% ref method flow chart and chapter and algorithm 
-
 % image of the videos 
 The results of this thesis is documented in this Youtube playlist \cite{youtube_playlist_results}. The playlist consist of five videos. 
 \begin{enumerate}
@@ -9,14 +7,22 @@ The results of this thesis is documented in this Youtube playlist \cite{youtube_
     
 
     \item "Nav2SLAM 2etg" \label{Nav2SLAM 2etg} is showing Husky driving autonomous using ROS2 foxy and galacitc, Nav2, SLAM Toolbox. An external computer is used to set initial position and goals form Rviz. 
-    At \href{https://youtu.be/JiTbKtXq_GY?t=65}{1:05} the husky struggles with navigating this could be caused by the range of the LiDAR, skidding wheels, the camera man walking behind the Husky or a combination. Problems like this has been thought the hole project 
+    At \href{https://youtu.be/JiTbKtXq_GY?t=65}{1:05} the husky struggles with navigating this could be caused by the range of the LiDAR, skidding wheels, the camera man walking behind the Husky or a combination. 
+    Skidding problems can be solved by using a different robot with for example omnidirectional turning.     The problem with skidding often occurs when Nav2 to goes into recovery mode, witch is started when Nav2 is uncertain of the position of the robots position. Nav2 commands the robot to spin around its own axes to recover the position estimate, but whit a skid turning robot turning creates uncertainty. It seem that Nav2 gains information by rotating the even for a skid turning robot but not as much as a omnidirectional robot. Spin around its own axes seems like a safe way to recover, but maybe its other alternatives of recovery for skid turning robots this has not been looked into. 
+    The range of the Ouster LiDAR cant be changed, but the placement can. During this thesis the LiDAR has been placed high up in front, it has been observed that this workers poorly for indoor navigation. The Husky has been tested with the LiDAR placed lower and this improves ability to see relevant obstacles. The placement of the LiDAR as a great impact of the autonomous navigation, but has not been properly tested in this thesis. Placing the LiDAR lower will cause it to see more obstacles on the ground. The LiDAR can also be placed further back increasing the distance to the front of the Husky, making the LiDAR see obstacles closer to the front. If the LiDAR is too far back it will loos information from the obstacles on the ground. Close range sensors could also be added to the front to detect where the LiDAR can not. 
+    The position of the LiDAR and the steering method is important for navigation and differ between navigation tasks, such as indoor vs outdoor. This should maybe have been looked more into.
 
-    \item "Mimic" \ref{Mimic} is a video showing the the TB3 mimic the Husky controlled by teleop. 
+    It should be mention that the two robots is also able to drive on a pre made map with Nav2 localization. They can also make a map when controlled manually. This was not recorded and edited do to time limitations. 
+
+    \item "Mimic" \ref{Mimic} is a video showing the the TB3 mimic the Husky controlled by teleop. This shows how well ROS communicates the same message to different hardware.
     
     \item "TimeDelayTest" is video where the Husky is driven by teleop and the TB3 follows using the Time Delay algorithm \ref{Time delay}. 
     
-    \item "HuskyNav2 TBsubpub" is showing Husky driving autonomous using ROS2 foxy and galacitc, Nav2, SLAM Toolbox while the TB3 is following using the Time Delay algorithm \ref{Time delay}. 
+    \item "HuskyNav2 TBsubpub" \label{HuskyNav2 TBsubpub} is showing Husky driving autonomous using ROS2 foxy and galacitc, Nav2, SLAM Toolbox while the TB3 is following using the Time Delay algorithm \ref{Time delay}. The algorithm is not suited for autonomous platooning. In theory the the follower should copy the leader just later in time. This means if the leader stops for more that the time delay follower and leader will collide. Even though the same velocity command should result in theory create the same movement for two different robots it dose not in practice. The errors will accumulate over time and the follower will drift out of the path. The Time Delay algorithm can be improved with more information into the "subpub" node. The node can subscribe to odometry of Husky and TB3, and use this information to calculate the offset of where the TB3 is and where it should be. When Husky drives with Nav2 the topic \topic{/path} can be used for improving where the awareness of where the TB3 should be. Potentially LiDAR data can also be used, and the algorithm could be improved forever. Continuing improving on Time Delay feels like building a bad version of Nav2. Therefor the author of this thesis believe using Nav2 API \ref{Further_work_Nav2_API} is the best way to achieve autonomous platooning with ROS2. 
+    
 \end{enumerate}
-The two robots is also able to drive on a pre made map with Nav2 localization. This was not recorded and edited do to time limitations. 
 
+\paragraph{The Xavier's} has not been the focus of thesis but is worth discussing since its the computer of both of the robots. In this project AI applications is not used witch is what the Xaviers are made for. The JetPack and GPU is useless in this project. The Xavier uses ARM, and x86-64 is most used CPU architecture. Since more people are using x86-64 there are more help and software available online. 
+It could be that the Xavier is well suited for AI applications, but for the future i would recommend x86-64 CPU, no GPU and pure Ubuntu for ROS2 projects. A GPU dosen't hurt but not necessary unless the PC on the robot is going to run simulations or AI. Pure Ubuntu is preferable for a bigger community, faster updates and less bloat. 
 
+\paragraph{ROS2 Foxy and Galactic} has been used in this project. Both robots have been tested with Foxy and Galactic. From this the experience is, the top priority should be choose the packages witch workes well for the hardware. Ideally a common LTS (Long Term Support) ROS distribution should be used to reduce sources of error and more software and help online, but it is not more important packages witch workers well with the hardware. 
