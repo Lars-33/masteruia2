@@ -1,41 +1,29 @@
 \chapter{Introduction}
 
+Robotics is vast and interdisciplinary, logistics and transportation is one of the field robotics is used. Autonomous vehicles and platooning systems are one of the largest areas of research in this field. 
+
+Platooning is a system where multiple vehicles travel in a close formation, offering numerous benefits such as improved traffic flow, fuel efficiency, and reduced emissions. Autonomous vehicles are self-driving vehicles that operate without human intervention, using advanced software and sensors to locate, navigate and avoid obstacles. 
 
 
-In recent years, robotic systems have become increasingly popular for a wide range of applications, including logistics, transportation, and surveillance. One of the most promising areas of research in robotics is the development of autonomous vehicles and platooning systems. Platooning, where multiple vehicles travel in a close formation, offers numerous benefits such as improved traffic flow, fuel efficiency, and reduced emissions. In this thesis, we investigate the platooning of two robotic ground vehicles, specifically the Turtlebot and Husky, and explore the potential benefits and challenges of this technology.
+Autonomous platooning is a combination of platooning and autonomous vehicles where some or all vehicles drive autonomously. This offers several advantages, like increased fuel efficiency by allowing vehicles to drive closely together in a coordinated manner, reducing aerodynamic drag, and optimizing fuel consumption. This results in improved fuel efficiency and reduced emissions. Secondly, autonomous platooning improves traffic flow by maintaining a consistent and synchronized speed, reducing congestion, and minimizing traffic jams. This leads to smoother and more efficient transportation. Additionally, autonomous platooning enhances safety as the vehicles in the platoon can react quickly to each other's movements, maintaining optimal spacing and responding in unison to potential hazards on the road. Moreover, platooning increases the capacity of roads, allowing for a higher density of vehicles without the need for significant roadway expansion. This maximizes the utilization of existing infrastructure. Lastly, autonomous platooning can result in cost savings for transportation and logistics companies by optimizing fuel efficiency, reducing congestion, and increasing overall operational efficiency. 
 
-The Turtlebot and Husky are two popular robotic platforms that offer different capabilities and characteristics. The Turtlebot is a small, low-cost robot designed for indoor environments, while the Husky is a larger, outdoor robot that can operate on rough terrain and challenging environments. Both robots are equipped with a variety of sensors, such as cameras, LIDAR, and IMU, and can be programmed to perform various tasks autonomously.
 
-The platooning of two robotic vehicles offers several advantages over traditional platooning of human-driven vehicles. For instance, it eliminates the risk of human error and enables more precise control of the vehicles' movements. Additionally, it allows for closer following distances, which can reduce air resistance, leading to improved fuel efficiency and reduced emissions.
+This thesis will investigate the autonomous platooning of two robotic ground vehicles, specifically the TurtleBot3 and the Husky. The TurtleBot3 is a small robot designed for indoor environments, while the Husky is a larger outdoor robot that can operate on rough terrain and challenging environments. Both robots are equipped with a computer and sensors. While working towards autonomous platooning, both robots were setup to drive autonomously independently, and a mimic algorithm was made. The mimic algorithm makes multiple robots mirror each other despite different hardware. Mimicking can generality be helpful in executing task parallel. In platooning, this can be used for simultaneous breaking or lane switching.   
 
-In this thesis, we propose a platooning system for the Turtlebot and Husky robots that leverages their respective capabilities and characteristics. The proposed system includes a leader-follower architecture, where the Husky serves as the leader and sends commands to the Turtlebot, which acts as the follower. The leader-follower architecture enables the Husky to navigate more challenging terrain and obstacles while the Turtlebot closely follows behind, maintaining a safe distance.
 
-We evaluate the performance of the proposed platooning system through simulations and experiments in a real-world environment, analyzing its performance under different scenarios such as varying speeds, obstacle avoidance, and communication delays. The results of the thesis provide insights into the potential benefits and challenges of platooning two robotic ground vehicles and demonstrate the feasibility and potential of this technology for real-world applications in logistics, transportation, and surveillance.
+This thesis will present a hardware and software setup for autonomous driving on both robots, mimic algorithm, and platooning algorithm. Furthermore, the performance of the autonomous driving and the two algorithms is evaluated through real-world experiments captured on video and discussed in the results and discussion chapter \ref{Results and discussion}.
 
-\subsection{Robotics} % mabye this should be movid to intro
-Robotics is a vast and interdisciplinary field that involves the design, construction, operation, and use of robots. From manufacturing and transportation to healthcare and entertainment, robots are used in a wide range of industries and applications to automate tasks, enhance human capabilities, and explore new frontiers.
-In this particular project, the focus is on autonomous driving robots. To achieve autonomous driving in this project the robots used motion estimate(odometry), vision(LiDAR) and software(ROS2 and Nav2). 
-%aj remove
-
-\subsubsection{Autonomous platooning}
-Autonomous platooning is a technique used in transportation, where a group of vehicles travel closely together in a formation, with one vehicle leading the group and the others following. The leading vehicle is typically driven by a human driver or an autonomous system, and the following vehicles are autonomous and communicate with the leading vehicle to maintain the desired distance and speed. The purpose of autonomous platooning is to increase efficiency and safety on the roads. By traveling in a close formation, the vehicles can reduce their air resistance and save fuel. Additionally, the autonomous systems can react more quickly to changes in the road conditions, such as traffic congestion or accidents, reducing the risk of collisions and improving overall safety. Autonomous platooning is a part of robotics.
-%aj remove from here and may be put it in introduction
 
 % aj para - 1:  more here. please refer to the stoa as mentioned in teams. mention what is platooning, why it is important. what are the use cases. what is the future of this e.g. logistics
 
-
+\newpage
 \section{Problem description}
 %aj para 2: write what you are planning to do
-The goal of this project is to develop an autonomous platooning system using a Husky Unmanned Ground Vehicle (UGV) and a TurtleBot3. The idea is to create a system where the TurtleBot3 can follow the Husky, while the Husky drives autonomously, creating a convoy or platoon of robots. This type of system has potential applications in various areas such as logistics, transportation, and search and rescue.
+This project aims to develop an autonomous platooning system using a Husky and a TurtleBot3. The idea is to create a system where the TurtleBot3 can follow the Husky while the Husky drives autonomously, creating a convoy or platoon of robots. 
 
+To achieve this goal, the project will leverage the capabilities of Robot Operating System 2 (ROS2), a common open-source robotics framework that provides a flexible and modular architecture for developing robotic systems. ROS2 will be used for communication between the Husky and the TurtleBot3, allowing them to exchange data. This will enable the two robots to work together, with the Husky leading and the TurtleBot3 following behind.
+To enable autonomous driving, the project will use the Navigation2 (NAV2) stack, a software framework for robot localization, navigation, and mapping. 
 
-To achieve this goal, the project will leverage the capabilities of ROS2, which is a popular open-source robotics framework that provides a flexible and modular architecture for developing robotic systems. ROS2 will be used for communication between the Husky and the TurtleBot3, allowing them to exchange data such as sensor measurements and control signals. This will enable the two robots to work together, with the Husky leading and the TurtleBot3 following behind.
-%aj not ROS2 here, very high level work
-To enable autonomous driving, the project will use the Navigation2 (NAV2) stack, which is a software framework for robot localisation, navigation and mapping. With NAV2, robots can achieve autonomous navigation by avoiding obstacles and staying on track.
-
-This project consist of equipping TurtleBot3 and Husky with sensors and configure them to drive autonomously using ROS2 and NAV2. Examining different approaches to achieving autonomous platooning. The ones achieved will be tested and discussed.  
-
-Overall, the development of an autonomous platooning system using a Husky UGV and a TurtleBot3 is an exciting and challenging project. Leveraging ROS2 and NAV2, the project will create a flexible and scalable system that can be adapted for various use cases and environments.
 
 \section{Research questions}
 
@@ -48,3 +36,25 @@ Overall, the development of an autonomous platooning system using a Husky UGV an
 
     \item RQ: How can autonomous platooning be achieved with the TB3 and the Husky? 
 \end{enumerate}
+
+
+\iffalse
+% old stuff witch is weaved in in the into at places where it fitted
+
+To achieve this goal, the project will leverage the capabilities of ROS2, which is a common open-source robotics framework that provides a flexible and modular architecture for developing robotic systems. ROS2 will be used for communication between the Husky and the TurtleBot3, allowing them to exchange data. This will enable the two robots to work together, with the Husky leading and the TurtleBot3 following behind.
+%aj not ROS2 here, very high level work
+To enable autonomous driving, the project will use the Navigation2 (NAV2) stack, which is a software framework for robot localisation, navigation and mapping. With NAV2, robots can achieve autonomous navigation by avoiding obstacles and staying on track.
+
+This project consist of equipping TurtleBot3 and Husky with sensors and configure them to drive autonomously using ROS2 and NAV2. Examining different approaches to achieving autonomous platooning. The ones achieved will be tested and discussed.  
+
+Overall, the development of an autonomous platooning system using a Husky and a TurtleBot3 is an exciting and challenging project. Leveraging ROS2 and NAV2, the project will create a flexible and scalable system that can be adapted for various use cases and environments.
+
+\subsection{Robotics} % mabye this should be movid to intro
+Robotics is a vast and interdisciplinary field that involves the design, construction, operation, and use of robots. From manufacturing and transportation to healthcare and entertainment, robots are used in a wide range of industries and applications to automate tasks, enhance human capabilities, and explore new frontiers.
+In this particular project, the focus is on autonomous driving robots. To achieve autonomous driving in this project the robots used motion estimate(odometry), vision(LiDAR) and software(ROS2 and Nav2). 
+%aj remove
+
+\subsubsection{Autonomous platooning}
+Autonomous platooning is a technique used in transportation, where a group of vehicles travel closely together in a formation, with one vehicle leading the group and the others following. The leading vehicle is typically driven by a human driver or an autonomous system, and the following vehicles are autonomous and communicate with the leading vehicle to maintain the desired distance and speed. The purpose of autonomous platooning is to increase efficiency and safety on the roads. By traveling in a close formation, the vehicles can reduce their air resistance and save fuel. Additionally, the autonomous systems can react more quickly to changes in the road conditions, such as traffic congestion or accidents, reducing the risk of collisions and improving overall safety. Autonomous platooning is a part of robotics.
+%aj remove from here and may be put it in introduction
+\fi

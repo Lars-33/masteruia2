@@ -4,7 +4,7 @@
     \item RQ: Is the TB3 and Husky suited for autonomous driving? 
     
     Both robots are capable of it. The TB3 is limited to even surfaces due to the wheel size and the ball casters. This wheel setup makes the TB3 omnidirectional making it pressies for autonomous driving. 
-    The Husky's size make it great for indoor and outdoor use, even though it is capable of autonomous driving the skid turning can be a problem \ref{Nav2SLAM 2etg}.
+    The Husky's size make it great for indoor and outdoor use, even though it is capable of autonomous driving the skid turning can be a problem as shown here \ref{Nav2SLAM 2etg}.
 
     \item RQ: How can the TB3 and the Husky drive autonomously?
 
@@ -34,6 +34,7 @@
 
 \begin{table}[H]
     \centering
+    \caption{Some Nav2 API commands \cite{rosnavAPI}.}
     \begin{tabular}{c|c}
         Command             & Description \\ \hline
         setInitialPose()    & Setting initial pose of a robot \\
@@ -43,7 +44,6 @@
         changeMap()         & Changes current map to chosen one \\
         getFeedback() & Info about the robot running Nav2 like Time stamp, frame\_id and pose\\
     \end{tabular}
-    \caption{Some Nav2 API commands \cite{rosnavAPI}}
     \label{tab:Nav2API}
 \end{table}
 
@@ -51,19 +51,22 @@ The idea was both husky and TurtleBot3 run Nav2, a node receives "getFeedback()"
 
 \begin{table}[H]
     \centering
+    \caption{Milestones of Nav2 API.}
     \begin{tabular}{c|c}
         Task                                                        & Status   \\ \hline
         Husky driving autonomously with Nav2                        & Complete \\
         TB3 driving autonomously with Nav2                          & Complete \\
         Control Nav2 with API from python                           & Complete \\
-        Husky with namespace                                        & Not complete \\
+        Control TurtleBot3 simulation with API                      & Complete \\
+        Control the Husky with API                                  & Complete \\
+        Control the TB3 with API                                    & Complete \\
         TB3 with namespace                                          & Complete \\
+        Husky with namespace                                        & Not complete \\
         Running Nav2 on Husky with namespace                        & Not complete \\
         Running Nav2 on TB3 with namespace                          & Not complete \\
         Running Husky and TB3 on same network with independent Nav2 & Not complete\\
         Node receiving position from Husky and sending goal to TB3  & Not complete \\
     \end{tabular}
-    \caption{Milestones of Nav2 API}
     \label{tab:MilestonesNav2API}
 \end{table}
 
